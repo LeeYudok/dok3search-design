@@ -1,0 +1,13 @@
+search_snapshot:
+  generation_id: gen-000002
+  epoch: 12
+  schema_version: 3
+  acl_policy_version: 2
+  applied_change_sequence: 452110
+  reader_state: ready
+  created_at: '2026-11-20T12:00:00Z'
+  requirements:
+    - retain_snapshot_for_request_lifetime
+    - reject_generation_without_validation
+    - persist_activation_intent
+    - reconcile_after_crash

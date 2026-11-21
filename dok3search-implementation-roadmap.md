@@ -1,0 +1,101 @@
+# dok3search — Superpowers 기반 탑다운 구현 계획
+
+> 작업 단위 = 계약 + 파일 + 실패 테스트(RED) + 최소 구현(GREEN) + 리팩터 + 리뷰 + 검증 로그. 빅뱅 금지.
+
+## 1. 전체 의존 순서
+
+`제품 유스케이스/UX → REST/MCP 계약 → Domain Port → Fake Adapter → File Parser/Indexer 실제 연결 → MCP 기본 검색 → 검색 품질 → 증분·DB → 운영 → 확장 에이전트`.
+
+각 단계 말미에 실제 윈도우 실행 가능 산출물을 제공한다. 단계 간 API 변경은 ADR로 기록하고 회귀 테스트를 수행한다. 1인 AI 코딩 개발 전제로 P0~P2를 우선 완성한다.
+
+## 2. 에픽과 작업 분해
+
+| 순서 | 에픽 | 구체 작업 | 테스트·인수 근거 |
+|---|---|---|---|
+| P0-1 | 뼈대 | Cargo Workspace/React/Vite, config, CI 스크립트 | Rust/React 템플릿 실행 |
+| P0-2 | Domain | Document, Section, Chunk, SearchQuery, SearchResult DTO/Port | JSON/trait 단위 테스트 |
+| P0-3 | 수직 UI | Fake SearchPort → REST /search → React 검색/문서 상세 | E2E로 더미 문서 열람 |
+| P1-1 | Markdown | ParserPort+Markdown 섹션/코드/링크 추출 | `markdown_golden` RED/GREEN |
+| P1-2 | Original Store | 파일 원문+SQLite 메타데이터 매핑 | 원문 해시·revision 테스트 |
+| P1-3 | Tantivy | schema, single writer, upsert/delete, reader reload | in-memory index tests |
+| P1-4 | end-to-end | Markdown 샘플 100건 → 검색/목차/원문 | API+UI E2E, 무외부망 |
+| P2-1 | 코드 | 심볼 분해, 확장자 레지스트리, Tree-sitter Rust/Java | AST fixture/행 번호 |
+| P2-2 | 국문 | 형태소 사전 오프라인 로딩, 원형/조사 검증 | Korean golden |
+| P2-3 | n-gram | 별도 bi-gram·2~4gram 필드 및 랭킹 | Recall/MRR 회귀 |
+| P2-4 | 운영 매뉴얼 | 자체 매뉴얼을 기본 Knowledge Pack으로 자동 색인 | UI/MCP manual self-search |
+| P2-5 | MCP | stdio/Streamable HTTP, 버전 핀, error schema | 실제 Codex/Claude 연결 |
+| P3-1 | 주기 수집 | 파일 워터마크/hash, batch, checkpoint, 재시도 | 중단/재시작 idempotence |
+| P3-2 | 분류 | Summary/tag/keyword/category 규칙 생성+수정 UI | 분류 JSON/원문 불변 |
+| P3-3 | 관리 UI | Source 등록/삭제, 작업 오류/재수집 | UI 권한/상태 E2E |
+| P4-1 | SQLite | SeaORM SourceAdapter, 커서/삭제 조정 | DDL fixture update/delete |
+| P4-2 | MySQL/MariaDB | 연결풀/조인 제한/커서/복구 | 두 DB 별도 계약 테스트 |
+| P4-3 | PostgreSQL | cursor, isolation, tombstone | DB contract suite |
+| P5-1 | Oracle | Oracle client + adapter + 바인딩된 SELECT | Oracle 통합망에서 테스트 |
+| P5-2 | 문서 | HTML/PDF/DOCX/SQL/JSP 보강 | 손실 경고+파서 fixture |
+| P6-1 | REST | pagination/ACL/log/metrics | 액세스 차단·로드 테스트 |
+| P7-1 | Windows | Service, event log, health, stop/restart, recovery | 재부팅 시 smoke test |
+| P7-2 | 폐쇄망 | vendor/npm 캐시/매뉴얼/설치 번들 | 네트워크 0건+frozen build |
+| P8 | 확장 | 분류 agent, A2A/ACP bridge | 프로토콜 계약 테스트 |
+
+## 3. 구현 작업 템플릿
+
+```markdown
+### TASK-ID: [P1-1] Markdown parser
+목표: H1/H2/코드블록/링크를 구조적으로 추출한다.
+생성/변경 파일:
+  crates/dok3-parser/src/markdown.rs
+  crates/dok3-parser/tests/markdown_golden.rs
+  fixtures/docs/md/*.md
+RED: cargo test -p dok3-parser markdown_golden  # 실패를 직접 확인
+GREEN: cargo test -p dok3-parser                # 통과 확인
+회귀: cargo test --workspace
+리뷰1: 요구사항·라인/섹션/코드블록 충족
+리뷰2: 에러 처리·경계·성능·불필요 의존 확인
+완료 증거: 명령, 실행 로그, 변경 요약, commit hash
+```
+
+## 4. 정적 품질·개발 게이트
+
+```powershell
+cargo fmt --all -- --check
+cargo clippy --workspace -- -D warnings
+cargo test --workspace --frozen
+# apps/web 에서
+npm run typecheck
+npm run test
+npm run build
+```
+
+테스트 명령은 워크스페이스가 만들어진 이후에만 유효하다. 초기 설계 단계에서는 실제 테스트를 수행했다고 주장하지 않는다. 추가된 API는 OpenAPI 스키마 및 MCP JSON Schema 계약 검증을 수행한다.
+
+## 5. PoC 검색 검증셋
+
+- Rust `async/await`, `Result`, `Send/Sync`, `borrow checker`, `tokio::spawn` 등 20개.
+- Java/Spring API, `ORA-00904`, SQL 트랜잭션, 로그/설정 등 20개.
+- 한글 은행 업무용어·띄어쓰기·부분문자/오타·2gram 등 20개.
+- 코드 식별자 `getAccountList`·`snake_case`·`X.Y::Z`·패키지 경로 등 20개.
+- 사내 ACL/버전 정합성/문서 원문/원문 인접 절 검색 등 20개.
+
+정답 문서가 있는 100개 질의로 Recall@10, MRR@10을 측정하고, `BM25 only`, `+morph`, `+bi/tri/4gram` 옵션별 비교표를 생성한다. 성능 수치는 CPU/메모리/색인 문서 수와 함께 기록한다.
+
+## 6. 릴리스 인수 기준
+
+1. P1 MVP: Windows에서 문서 업로드/색인 → 검색 → 블로그형 원문·목차 보기 가능.
+2. P2: 한글/코드/오류 검색 시 골든 질의 회귀 테스트 통과.
+3. P3: 파일 변경·삭제·강제 중지·재기동에도 문서 중복/누락 없음.
+4. P4/P5: DB별 읽기 전용 증분·물리 삭제 검증 전략과 실제 테스트 로그.
+5. P2: MCP를 통해 실제 클라이언트에서 문서 검색·섹션 조회 가능.
+6. P7: 외부 네트워크 없는 Windows 클린 설치·빌드·운영, 제품 매뉴얼 검색 가능.
+
+후속 기능이 미완성이어도 이전 릴리스의 검색·원문 열람은 계속 정상 제공한다.
+
+## v1.2 선행 작업
+증분 색인 구현 전 `dok3-index-manager`의 generation state machine/전환 장애 주입 테스트를 작성한다. 1만→10만→50만 문서 단계별 성능 및 검색 동시 부하 게이트를 통과한 뒤 운영 규모를 확정한다.
+
+## v1.3 구현 게이트 추가
+
+- Workspace 골격과 포트 계약을 먼저 만들되 미구현 함수를 실행 경로에 두지 않는다.
+- Generation Manager는 스왑 직전 변경분 경계, crash injection, Windows 파일 핸들 테스트를 통과해야 한다.
+- 50만 원본/최대 500만 섹션 벤치마크를 색인 중 검색 부하와 함께 측정한다.
+- 세부 기준: `RUST_WORKSPACE_AND_CONTRACTS.md`, `BLUE_GREEN_OPERATIONAL_PROTOCOL.md`.
+

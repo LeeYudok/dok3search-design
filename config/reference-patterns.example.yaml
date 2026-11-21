@@ -1,0 +1,15 @@
+reference_patterns:
+  search_engine: tantivy_embedded
+  architecture_sources:
+    - project: quickwit
+      use: indexing_pipeline_and_segments
+    - project: meilisearch
+      use: task_lifecycle_and_api
+    - project: zoekt
+      use: code_search_result_model
+    - project: elasticsearch
+      use: alias_swap_pattern_only
+  constraints:
+    external_search_cluster_required: false
+    offline_deployment_required: true
+    review_license_before_copying_code: true

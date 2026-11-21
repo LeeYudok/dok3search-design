@@ -1,0 +1,25 @@
+# Design example: validate against implementation before deployment.
+document:
+  id: manual:rust:ownership:001
+  source_id: rust_manual
+  title: Ownership
+  summary: Rust ownership rules
+  tags:
+  - rust
+  - ownership
+  keywords:
+  - borrow
+  - move
+  - lifetime
+  category: language/rust
+  language: rust
+  version: pinned
+  source_uri: rust/book/ownership.md
+  security_scope: public
+  content_hash: sha256-placeholder
+  body: Original document content
+  sections:
+  - heading: Ownership
+    anchor: ownership
+    line_start: 1
+    line_end: 40

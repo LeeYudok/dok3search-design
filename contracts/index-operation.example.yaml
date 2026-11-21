@@ -1,0 +1,13 @@
+# Durable indexing journal state machine (design contract)
+operation:
+  id: op-0001
+  source_id: rust_manual
+  source_cursor: opaque-source-cursor
+  document_id: rust_manual:chapter-01
+  revision_hash: sha256-example
+  operation_type: upsert # upsert | delete
+  state: prepared # prepared | applied | visible | committed | failed
+  index_generation: 1
+  attempts: 0
+  checkpoint_policy: after_commit_and_reader_reload
+  replay_policy: idempotent_delete_then_add

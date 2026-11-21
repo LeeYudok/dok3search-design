@@ -1,0 +1,45 @@
+# Example mappings only; DB-specific integration tests required.
+sources:
+- id: rust_manual
+  kind: filesystem
+  path: ./knowledge/rust
+  include:
+  - '**/*.md'
+  - '**/*.html'
+  mode: hash_scan
+  schedule: manual
+- id: internal_pg
+  kind: postgresql
+  dsn_env: DOK3_PG_DSN
+  table: public.knowledge_documents
+  primary_key:
+  - id
+  content_columns:
+  - title
+  - body
+  updated_at_column: updated_at
+  deleted_at_column: deleted_at
+  incremental:
+    mode: watermark
+    overlap_seconds: 300
+    reconcile: periodic_key_scan
+    deletion_strategy: periodic_key_reconciliation
+    requires_source_consistency_test: true
+    watermark_is_best_effort_without_change_log: true
+- id: internal_oracle
+  kind: oracle
+  dsn_env: DOK3_ORACLE_DSN
+  table: KNOWLEDGE_DOCUMENTS
+  primary_key:
+  - ID
+  content_columns:
+  - TITLE
+  - BODY
+  updated_at_column: UPDATED_AT
+  incremental:
+    mode: watermark
+    reconcile: periodic_key_scan
+    deletion_strategy: periodic_key_reconciliation
+    requires_source_consistency_test: true
+    watermark_is_best_effort_without_change_log: true
+  note: Oracle driver adapter; verify DB version and permissions

@@ -1,0 +1,19 @@
+generation_transition:
+  transition_id: tr-000002
+  from_generation: gen-000001
+  to_generation: gen-000002
+  from_epoch: 3
+  target_sequence: 1200000
+  state: validating # building | catching_up | validating | ready | active | retired | failed
+  required_checks:
+    - manifest_checksum
+    - reader_reopen
+    - schema_analyzer_compatibility
+    - applied_sequence_equal
+    - document_and_tombstone_reconcile
+    - acl_negative_tests
+    - search_latency_under_load
+    - free_disk_space
+  durable_pointer_update: sqlite_transaction
+  runtime_switch: arc_swap
+  recovery_authority: durable_pointer_and_verified_manifest

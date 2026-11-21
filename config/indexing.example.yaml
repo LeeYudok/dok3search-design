@@ -1,0 +1,17 @@
+indexing:
+  journal: sqlite
+  checkpoint_after: tantivy_commit_and_reader_reload
+  retry:
+    max_attempts: 5
+    exponential_backoff: true
+  recovery:
+    replay_uncommitted: true
+    reconcile_generations: true
+  sources:
+    watermark:
+      safe_upper_bound_from_source_db: true
+      overlap_seconds: 300 # tune for source transaction characteristics
+      require_delete_strategy: true
+    reconcile:
+      enabled: true
+      compare_primary_keys: true

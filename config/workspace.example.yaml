@@ -1,0 +1,24 @@
+workspace:
+  name: dok3search
+  language: rust
+  strategy: skeleton_first_vertical_slices
+  crates:
+    - dok3-core
+    - dok3-domain
+    - dok3-storage
+    - dok3-connectors
+    - dok3-parser
+    - dok3-analyzer
+    - dok3-index
+    - dok3-index-manager
+    - dok3-search
+    - dok3-agent
+    - dok3-api
+    - dok3-benchmark
+    - dok3-server
+  quality_gates:
+    - cargo_fmt_check
+    - cargo_clippy
+    - cargo_test_workspace
+    - offline_build
+    - generation_crash_recovery

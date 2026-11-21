@@ -1,0 +1,12 @@
+# Design example: validate against implementation before deployment.
+job_id: job-001
+source_id: internal_pg
+mode: incremental
+checkpoint:
+  updated_at: '2026-11-20T00:00:00Z'
+  pk: '100'
+on_delete: delete_from_index
+retry:
+  max_attempts: 3
+  backoff_seconds: 5
+state: pending

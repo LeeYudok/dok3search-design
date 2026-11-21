@@ -1,0 +1,8 @@
+# Requested scope never grants authorization.
+query: Rust ownership borrow checker
+filters:
+  language: rust
+limit: 10
+include_snippets: true
+requested_scope: 'public # advisory only; server derives effective ACL from authenticated
+  principal'

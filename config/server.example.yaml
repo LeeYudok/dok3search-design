@@ -1,0 +1,74 @@
+# Design contract example; not executable until implemented.
+server:
+  bind: 127.0.0.1
+  port: 8443
+  tls:
+    enabled: true
+    certificate_ref: windows-cert-store://dok3search-server
+  serve_react_assets: true
+  routes:
+    web: /
+    rest: /api/v1
+    mcp: /mcp
+    a2a: /a2a
+    health: /health
+    admin: /admin
+storage:
+  root: ./data
+  sqlite_path: ./data/metadata.sqlite
+  index_root: ./data/tantivy
+  document_root: ./data/documents
+search:
+  engine: tantivy
+  ranking: bm25
+  top_k: 10
+  max_top_k: 100
+  analyzers:
+    korean_morphology: true
+    bigrams: true
+    ngrams:
+    - 2
+    - 3
+    code_identifiers: true
+  reranking: rrf
+  index_manifest:
+    schema_version: 1
+    analyzer_version: pin-after-compatibility-tests
+    dictionary_version: pin-after-compatibility-tests
+protocols:
+  rest: true
+  mcp:
+    enabled: true
+    transport: streamable_http
+    path: /mcp
+  a2a:
+    enabled: false
+    path: /a2a
+  acp:
+    enabled: false
+    transport: stdio
+security:
+  default_deny_internal: true
+  auth_required: true
+  audit_enabled: true
+  admin_requires_role: admin
+  requested_scope_is_authoritative: false
+  enforce_acl_on:
+  - search
+  - document
+  - section
+  - original
+  - snippet
+  - facet
+  - suggestion
+  - cache
+  - mcp
+  - a2a
+offline:
+  disable_external_internet: true
+  bundle_static_assets: true
+indexing:
+  journal: sqlite
+  checkpoint_after: tantivy_commit_and_reader_reload
+  replay_idempotent: true
+  reconcile_on_startup: true

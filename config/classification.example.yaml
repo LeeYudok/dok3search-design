@@ -1,0 +1,13 @@
+# Design example: validate against implementation before deployment.
+classification:
+  enabled: false
+  mode: suggest_only
+  fields:
+  - summary
+  - tags
+  - keywords
+  - category
+  provider: local_agent
+  max_tags: 12
+  preserve_manual_values: true
+  audit_changes: true

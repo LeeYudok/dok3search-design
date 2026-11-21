@@ -1,0 +1,13 @@
+search_profiles:
+  api_symbol:
+    stages: [exact_symbol, symbol_parts_bm25, body_bm25, ngram_fallback]
+  error_code:
+    stages: [exact_error_code, phrase_bm25, body_bm25]
+  korean_manual:
+    stages: [morphology_bm25, phrase_bm25, bigram_fallback]
+  generic:
+    stages: [plain_bm25, morphology_bm25, ngram_fallback]
+  rerank: rrf
+  filters:
+    effective_acl: server_derived_only
+    library_version: exact_or_explicit_compatible

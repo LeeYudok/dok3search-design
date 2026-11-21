@@ -1,0 +1,13 @@
+# Paginated source-preserving section response
+request:
+  document_id: rust_manual:chapter-01
+  section_id: ownership
+  cursor: null
+  max_chars: 12000
+response:
+  source_revision: sha256-example
+  heading_path: [Rust, Ownership]
+  citation: {source_uri: 'kb://rust_manual/chapter-01', section: ownership}
+  text: 'Section content here'
+  next_cursor: null
+  truncated: false

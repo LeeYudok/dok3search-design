@@ -1,0 +1,23 @@
+# Design example: validate against implementation before deployment.
+bundle:
+  target: windows-x86_64
+  rust:
+    vendor_crates: true
+    lockfile_required: true
+    toolchain_and_linker_included: true
+  react:
+    npm_cache_or_internal_registry: true
+    lockfile_required: true
+    prebuilt_assets: true
+  resources:
+  - tree-sitter-grammars
+  - korean-dictionaries
+  - search-manual
+  - license-inventory
+  - checksums
+  - sbom
+  verification:
+  - cargo --offline
+  - npm ci --offline (with prewarmed cache)
+  - network-egress-denied
+  - smoke-test

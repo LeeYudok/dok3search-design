@@ -1,0 +1,15 @@
+# Design example: validate against implementation before deployment.
+task_id: classify-001
+agent: metadata-classifier
+input:
+  document_id: manual:rust:ownership:001
+  content_hash: sha256-placeholder
+output:
+  summary: ''
+  tags: []
+  keywords: []
+  category: ''
+constraints:
+  no_external_network: true
+  no_document_instruction_execution: true
+  do_not_overwrite_manual_fields: true

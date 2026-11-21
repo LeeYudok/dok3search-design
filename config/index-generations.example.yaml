@@ -1,0 +1,28 @@
+index_generations:
+  strategy: blue_green
+  metadata_store: sqlite
+  active_pointer: persisted_generation_epoch
+  build:
+    parser_workers: 8 # benchmark-tuned
+    queue_capacity: 512
+    batch_documents: 2000
+    throttle_on_search_p95_ms: 300
+    require_disk_headroom_check: true
+  replay:
+    journal: durable_change_log
+    enforce_ordered_sequence: true
+    require_source_reconciliation: true
+  activation:
+    validate_manifest: true
+    validate_acl: true
+    validate_reader_reopen: true
+    require_equal_applied_sequence: true
+    persist_pointer_before_runtime_swap: true
+    startup_reconcile_pointer: true
+  rollback:
+    require_replay_to_target_sequence: true
+    retain_generations: 2
+    retain_change_log_for_rollback: true
+  cleanup:
+    wait_for_reader_references: true
+    never_delete_active_generation: true
