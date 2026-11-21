@@ -4,7 +4,15 @@ dok3search는 금융권 Windows 폐쇄망에서 쓰는 검색 도구다. 사람�
 
 ## 시스템 구조
 
-Rust 서버가 자료를 수집해 원문과 절 단위로 정리한다. Tantivy로 색인하고 검색 결과에 출처와 요약을 표시한다. 사용자는 React 화면에서 원문을 읽고, AI 에이전트는 REST와 MCP로 같은 자료를 조회한다. 저장소 경계와 검색 흐름은 [최종 아키텍처 설계서](dok3search-final-architecture.md)에서 확인한다.
+목표 구조는 Rust 서버에서 자료를 원문과 절 단위로 정리하고 Tantivy로 색인한다. React 화면은 검색 결과와 원문을 보여 준다. AI 에이전트의 자료 조회 경로는 REST와 MCP로 설계한다. 저장소 경계와 검색 흐름은 [최종 아키텍처 설계서](dok3search-final-architecture.md)에서 확인한다.
+
+## 현재 구현
+
+[구현 저장소의 P0-3](https://github.com/LeeYudok/dok3search/pull/12)은 Axum 인메모리 저장소로 검색, 문서 상세, 절 조회를 제공한다. React는 이 API에 연결하고, 개발 서버에서 API에 연결할 수 없으면 내장 샘플을 사용한다. Tantivy 색인과 MCP는 [구현 로드맵](dok3search-implementation-roadmap.md)의 후속 단계에 있다.
+
+REST 요청 본문이나 조회 인자의 형식이 잘못되면 HTTP 400과 `INVALID_INPUT` 코드를 담은 JSON을 반환한다. [API 입력 오류 계약](https://github.com/LeeYudok/dok3search/pull/14)
+
+[Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/8)는 프런트에 포함한다. 두 카테고리에서 검색·열람을 로컬로 처리하며, 각 문서는 Markdown 원문과 예제 코드, 출처와 라이선스를 포함한다.
 
 ## 화면 구조
 
@@ -13,9 +21,11 @@ Rust 서버가 자료를 수집해 원문과 절 단위로 정리한다. Tantivy
 | 메인 | `/` | 검색어를 입력하거나 카테고리로 들어간다. |
 | 검색 결과 | `/search` | 검색 결과를 카테고리로 좁힌다. 결과는 15건씩 표시하고 요약은 두 줄까지 보여 준다. |
 | 문서 상세 | `/docs/:id` | 제목, 출처, 요약, 본문을 읽는다. 읽기 진행선과 현재 절을 표시한다. |
-| 설계 문서 | `/search?category=design` | 이 문서와 YAML 목록에서 설계 자료를 찾는다. |
+| 설계 문서 | `/search?category=design` | 인덱스와 맵을 한 건씩 표시한다. 상세에서 Markdown과 YAML을 전환한다. |
+| Rust 자료 | `/search?category=rust` | Google Comprehensive Rust 한국어판과 공식 Rust Book을 찾는다. |
+| Go 자료 | `/search?category=go` | Go 언어 명세, Go Modules Reference, Effective Go를 찾는다. |
 
-검색어, 카테고리, 페이지는 결과 URL에 남긴다. 검색 결과에서 문서를 연 뒤 돌아갈 때 같은 조건을 복원한다. 현재 화면은 로컬 샘플로 동작한다. 색인 서버와 자동 분류의 구현 순서는 [구현 로드맵](dok3search-implementation-roadmap.md)에 적는다.
+검색어, 카테고리, 페이지는 결과 URL에 남긴다. 검색 결과에서 문서를 연 뒤 돌아갈 때 같은 조건을 복원한다.
 
 ## 색상과 서체
 

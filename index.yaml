@@ -2,6 +2,16 @@ schema_version: '1.0'
 project: dok3search
 updated: '2026-11-22'
 
+implementation:
+  repository: 'https://github.com/LeeYudok/dok3search'
+  merged_phase: 'P0-3'
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/12'
+  local_search_backend: in-memory-fake
+  api_input_error_reference: 'https://github.com/LeeYudok/dok3search/pull/14'
+  bundled_references:
+    issue: 'https://github.com/LeeYudok/dok3search/issues/8'
+    categories: [rust, go]
+
 entrypoints:
   - {id: index, title: 설계 인덱스, markdown: index.md, yaml: index.yaml}
   - {id: map, title: 전체 설계 맵, markdown: map.md, yaml: map.yaml}

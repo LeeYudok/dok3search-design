@@ -6,15 +6,17 @@
 
 `제품 유스케이스/UX → REST/MCP 계약 → Domain Port → Fake Adapter → File Parser/Indexer 실제 연결 → MCP 기본 검색 → 검색 품질 → 증분·DB → 운영 → 확장 에이전트`.
 
-각 단계 말미에 실제 윈도우 실행 가능 산출물을 제공한다. 단계 간 API 변경은 ADR로 기록하고 회귀 테스트를 수행한다. 1인 AI 코딩 개발 전제로 P0~P2를 우선 완성한다.
+단계 간 API 변경은 ADR로 기록하고 회귀 테스트를 수행한다. Windows 서비스와 폐쇄망 설치 검증은 P7에서 수행한다.
+
+P0-1~P0-3은 [구현 저장소 main](https://github.com/LeeYudok/dok3search/pull/12)에 반영됐다. 현재 로컬 서버는 인메모리 검색과 React를 연결한다. [Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/8)는 프런트에 포함하고 외부 접속을 차단한 브라우저에서 검증한다. 파일 수집·Tantivy·MCP는 아래 순서대로 구현한다.
 
 ## 2. 에픽과 작업 분해
 
 | 순서 | 에픽 | 구체 작업 | 테스트·인수 근거 |
 |---|---|---|---|
-| P0-1 | 뼈대 | Cargo Workspace/React/Vite, config, CI 스크립트 | Rust/React 템플릿 실행 |
-| P0-2 | Domain | Document, Section, Chunk, SearchQuery, SearchResult DTO/Port | JSON/trait 단위 테스트 |
-| P0-3 | 수직 UI | Fake SearchPort → REST /search → React 검색/문서 상세 | E2E로 더미 문서 열람 |
+| P0-1 | 뼈대 | `backend/rust/` Cargo 워크스페이스, React·Vite, 설정 디렉터리 | Rust·React 빌드 |
+| P0-2 | Domain | 문서·절·검색·ACL·변경 DTO와 포트 | JSON 직렬화, ACL, 요청 정규화 계약 테스트 |
+| P0-3 | 수직 UI | 인메모리 검색 → `POST /api/v1/search` → React 검색·문서 상세 | HTTP 검색·절 읽기·오류 응답과 React 연결 검증 |
 | P1-1 | Markdown | ParserPort+Markdown 섹션/코드/링크 추출 | `markdown_golden` RED/GREEN |
 | P1-2 | Original Store | 파일 원문+SQLite 메타데이터 매핑 | 원문 해시·revision 테스트 |
 | P1-3 | Tantivy | schema, single writer, upsert/delete, reader reload | in-memory index tests |
@@ -57,16 +59,13 @@ GREEN: cargo test -p dok3-parser                # 통과 확인
 ## 4. 정적 품질·개발 게이트
 
 ```powershell
-cargo fmt --all -- --check
-cargo clippy --workspace -- -D warnings
-cargo test --workspace --frozen
-# apps/web 에서
-npm run typecheck
-npm run test
-npm run build
+cargo fmt --manifest-path backend/rust/Cargo.toml --all -- --check
+cargo clippy --manifest-path backend/rust/Cargo.toml --workspace --all-targets -- -D warnings
+cargo test --manifest-path backend/rust/Cargo.toml --workspace --locked
+npm --prefix frontend run build
 ```
 
-테스트 명령은 워크스페이스가 만들어진 이후에만 유효하다. 초기 설계 단계에서는 실제 테스트를 수행했다고 주장하지 않는다. 추가된 API는 OpenAPI 스키마 및 MCP JSON Schema 계약 검증을 수행한다.
+위 명령은 [구현 저장소](https://github.com/LeeYudok/dok3search) 루트에서 실행한다. 프런트 빌드는 타입 검사와 Vite 빌드를 함께 실행한다. P0 REST 동작은 `dok3-api`의 HTTP 계약 테스트로 확인한다. 폐쇄망 빌드에는 고정 버전 의존성을 먼저 반입한다.
 
 ## 5. PoC 검색 검증셋
 

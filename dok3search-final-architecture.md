@@ -6,6 +6,8 @@
 > 주요 환경: Windows 온프레미스 / Rust / Tantivy / React / TypeScript  
 > 원칙: 벡터·임베딩·외부 웹 의존성 없음. 사람과 AI가 동일한 원문 지식을 검색하고 읽는다.
 
+릴리스별로 실제 사용할 수 있는 기능은 [설계 인덱스의 현재 구현](index.md#현재-구현)에 기록한다.
+
 ## 1. 비전과 범위
 
 dok3search는 금융권 폐쇄망에서 개발 문서·기술 교재·매뉴얼·API 레퍼런스·코드 예제·사내 소스·SR/업무 문서를 수집·구조화·색인·검색·열람하는 **개발 지식 파운데이션**이다. 검색 결과를 짧게 보여주는 것으로 끝내지 않고 **문서의 제목→요약→장/절→본문→예제→출처→이전/다음 문맥**으로 탐색할 수 있어야 한다. 사람은 React 블로그형 웹 UI로, AI 코딩 에이전트는 MCP/REST로 동일한 원문을 읽는다.
@@ -59,31 +61,20 @@ dok3search는 금융권 폐쇄망에서 개발 문서·기술 교재·매뉴얼�
 
 ```text
 dok3search/
-├── Cargo.toml                  # workspace, versions, feature flags
-├── Cargo.lock
-├── crates/
-│   ├── dok3-domain/            # Document, Chunk, SearchRequest, ACL, ports
-│   ├── dok3-application/       # UseCase orchestration, transaction boundaries
-│   ├── dok3-parser/            # ParserRegistry + format plugins
-│   ├── dok3-analyzer/          # Korean morph, ngram, identifier tokenization
-│   ├── dok3-index-tantivy/     # Index schema, writer queue, query planner
-│   ├── dok3-store/             # SQLite metadata, original blob storage
-│   ├── dok3-connectors/        # File/Git/DB import & incremental sync
-│   ├── dok3-api/               # Axum REST, RBAC/ACL, audit
-│   ├── dok3-mcp/               # MCP tools and stdio/HTTP adapter
-│   ├── dok3-a2a/               # Optional agent-to-agent adapter
-│   ├── dok3-acp/               # Optional editor-agent adapter
-│   ├── dok3-worker/            # indexing queue and scheduler
-│   └── dok3-windows/           # Windows service lifecycle and config
-├── apps/
-│   ├── dok3search/             # single compiled Windows executable
-│   └── web/                    # React + TypeScript + Vite
-├── fixtures/                   # golden docs, source-code and DB datasets
-├── tests/                      # contract, integration and end-to-end
-├── configs/                    # TOML, example connector manifests
-├── docs/                       # ADRs, design, test matrix, runbooks
-└── tools/                      # offline knowledge pack builder
+├── backend/rust/
+│   ├── Cargo.toml
+│   ├── Cargo.lock
+│   ├── rust-toolchain.toml
+│   └── crates/                 # 도메인, 소스, 파서, 색인, 검색, API, 에이전트, 서버
+├── frontend/                   # React + TypeScript + Vite
+├── config/                     # 설정 예시와 스키마
+├── contracts/                  # REST·MCP·도메인 계약
+├── tests/                      # 계약·통합·장애 주입 테스트
+├── docs/                       # 설계와 운영 문서
+└── scripts/                    # 저장소 검증과 유틸리티
 ```
+
+현재 crate 이름과 역할은 [Rust 워크스페이스·계약](RUST_WORKSPACE_AND_CONTRACTS.md)에 있다.
 
 ### 2.2 모듈 설계 수칙
 
@@ -342,7 +333,7 @@ pub struct SourceBatch {
 
 | 단계 | 배포 가능한 수직 기능 | 구현 모듈 | 통과 게이트 |
 |---|---|---|---|
-| P0 | 앱 기동, `/health`, React 껍데기, Mock 검색 | domain/application/api/web | 계약 테스트·UI 스모크 |
+| P0 | 앱 기동, `/health/ready`, 인메모리 REST 검색과 React 화면 | domain/search/api/server/frontend | 계약 테스트·UI 스모크 |
 | P1 | Markdown/HTML 파일 반입 → 검색 → 블로그 원문 보기 | parser/store/tantivy/indexer/web | 문서 100건 골든 테스트, API E2E |
 | P2a | MCP stdio + Streamable HTTP로 AI-Coder 원문 검색 | mcp | 실제 클라이언트 연결 E2E |
 | P2 | 형태소·bi-gram/n-gram·BM25·코드 심볼 검색 | analyzer/search | 검색 평가셋, 토큰 골든 테스트 |

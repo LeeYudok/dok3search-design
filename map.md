@@ -12,10 +12,12 @@
 
 | 항목 | ID | 경로 | 상태 | 근거 |
 |---|---|---|---|---|
-| 메인 | `home_screen` | `/` | 로컬 샘플 | [화면 구조](index.md#화면-구조) |
-| 검색 결과 | `search_results` | `/search` | 로컬 샘플 | [화면 구조](index.md#화면-구조) |
-| 문서 상세 | `document_reader` | `/docs/:id` | 로컬 샘플 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
-| 설계 문서 목록 | `design_catalog` | `/search?category=design` | 로컬 샘플 | [문서 읽는 순서](index.md#문서-읽는-순서) |
+| 메인 | `home_screen` | `/` | 구현 | [화면 구조](index.md#화면-구조) |
+| 검색 결과 | `search_results` | `/search` | 인메모리 REST 연결 | [화면 구조](index.md#화면-구조) |
+| 문서 상세 | `document_reader` | `/docs/:id` | 인메모리 REST 연결 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
+| 설계 문서 목록 | `design_catalog` | `/search?category=design` | 형식별 원문 열람 | [화면 구조](index.md#화면-구조) |
+| Rust 자료 | `rust_reference` | `/search?category=rust` | 로컬 검색·열람 | [현재 구현](index.md#현재-구현) |
+| Go 자료 | `go_reference` | `/search?category=go` | 로컬 검색·열람 | [현재 구현](index.md#현재-구현) |
 | 출처 브라우징 | `sources_screen` | `/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 커넥터 관리 | `connector_admin` | `/admin/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 색인 작업 관리 | `jobs_screen` | `/admin/jobs` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
@@ -57,7 +59,11 @@
 |---|---|---|
 | 메인 | 이어지는 흐름 | 검색 결과 |
 | 메인 | 이어지는 흐름 | 설계 문서 목록 |
+| 메인 | 이어지는 흐름 | Rust 자료 |
+| 메인 | 이어지는 흐름 | Go 자료 |
 | 검색 결과 | 이어지는 흐름 | 문서 상세 |
+| Rust 자료 | 이어지는 흐름 | 문서 상세 |
+| Go 자료 | 이어지는 흐름 | 문서 상세 |
 | 검색 결과 | 설계 근거 | Tantivy 검색 |
 | 검색 결과 | 데이터 계약 | 검색 요청 |
 | 검색 결과 | 데이터 계약 | 검색 스냅샷 |
