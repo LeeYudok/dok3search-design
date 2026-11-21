@@ -1,25 +1,32 @@
-# Design example: validate against implementation before deployment.
+# Design example aligned with dok3-domain::document::Document and DocumentSection.
 document:
-  id: manual:rust:ownership:001
-  source_id: rust_manual
+  id: 'guide:rust:ownership:001'
+  revision_id: 'sha256:placeholder'
+  source_id: rust-book
+  source: rust-book
   title: Ownership
-  summary: Rust ownership rules
+  summary: Rust ownership and borrowing rules
+  category: guide
+  tag: rust
   tags:
-  - rust
-  - ownership
+    - rust
+    - ownership
   keywords:
-  - borrow
-  - move
-  - lifetime
-  category: language/rust
+    - borrow
+    - move
+    - lifetime
   language: rust
   version: pinned
+  date: '2026-11-22'
   source_uri: rust/book/ownership.md
-  security_scope: public
+  acl_scope: public
   content_hash: sha256-placeholder
   body: Original document content
   sections:
-  - heading: Ownership
-    anchor: ownership
-    line_start: 1
-    line_end: 40
+    - section_id: ownership
+      heading: Ownership
+      anchor: ownership
+      order: 1
+      line_start: 1
+      line_end: 40
+      body: Ownership lets Rust make memory safety guarantees without garbage collection.

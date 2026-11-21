@@ -1,7 +1,13 @@
-# Requested scope never grants authorization.
+# Design example aligned with dok3-domain::search::SearchRequest and SearchFilters.
+# Requested scope is advisory narrowing only and never grants authorization.
 query: Rust ownership borrow checker
 filters:
+  category: guide
   language: rust
-limit: 10
+  source_id: rust-book
+  tags:
+    - ownership
+page: 1
+limit: 15
 include_snippets: true
-requested_scope: public # The server derives effective ACL from the principal.
+requested_scope: public # Server derives effective ACL from Principal::effective_scopes.
