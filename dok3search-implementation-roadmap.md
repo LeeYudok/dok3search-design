@@ -8,7 +8,7 @@
 
 단계 간 API 변경은 ADR로 기록하고 회귀 테스트를 수행한다. Windows 서비스와 폐쇄망 설치 검증은 P7에서 수행한다.
 
-P0-1~P0-3은 [구현 저장소 main](https://github.com/LeeYudok/dok3search/pull/12)에 반영됐다. 현재 로컬 서버는 인메모리 검색과 React를 연결한다. [Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/8)는 프런트에 포함하고 외부 접속을 차단한 브라우저에서 검증한다. 파일 수집·Tantivy·MCP는 아래 순서대로 구현한다.
+P0-1~P0-3은 [구현 저장소 main](https://github.com/LeeYudok/dok3search/pull/12)에 반영됐다. 현재 로컬 서버는 인메모리 검색과 React를 연결한다. Rust·Go 참고 자료는 백엔드 색인과 분리된 프런트 정적 자료다. 개발 가이드의 `topic=rust`와 `topic=go`로 고른다. Rust Reference와 Cargo Book을 포함한 자료 범위는 [구현 이슈 #21](https://github.com/LeeYudok/dok3search/issues/21)에 맞췄다. 검색 API와 MCP에 정적 자료를 적재하는 일은 이 현행화 범위에 포함하지 않는다. 파일 수집·Tantivy·MCP는 아래 순서대로 구현한다.
 
 ## 2. 에픽과 작업 분해
 
