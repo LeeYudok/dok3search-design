@@ -4,6 +4,8 @@
 
 금융권 Windows 폐쇄망에서 사람과 AI 에이전트가 교재·매뉴얼·코드·사내 문서를 검색/읽기 위한 Rust + Tantivy + React 플랫폼. 벡터 DB/RAG 필수 아님. 기본 인바운드 포트는 HTTPS 8443 하나.
 
+설계 개요와 읽는 순서는 [index.md](index.md)에, 문서 트리는 [index.yaml](index.yaml)에 있다. 화면과 구성요소의 연결은 [map.md](map.md)와 [map.yaml](map.yaml)에서 확인한다.
+
 ## 우선 읽을 문서
 1. `DESIGN_REVIEW_AND_FIXES.md` — 기존 P0/P1 검토
 2. `BLUE_GREEN_DESIGN_REVIEW.md` — 세대 전환 설계 검토

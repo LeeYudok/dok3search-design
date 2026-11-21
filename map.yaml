@@ -1,0 +1,108 @@
+schema_version: '1.0'
+project: dok3search
+updated: '2026-11-22'
+index: index.yaml
+
+architecture:
+  reference: dok3search-final-architecture.md
+  implementation_plan: dok3search-implementation-roadmap.md
+  components:
+    - {id: ingestion, role: 자료 수집과 원문·절 단위 구조화}
+    - {id: search, role: Tantivy 색인과 검색}
+    - {id: web, role: React 검색과 원문 열람}
+    - {id: agent_access, role: REST와 MCP를 통한 자료 조회}
+
+screens:
+  - {id: home, path: '/', status: local_scaffold}
+  - {id: search, path: '/search', status: local_scaffold, page_size: 15, snippet_lines: 2}
+  - {id: reader, path: '/docs/:id', status: local_scaffold}
+  - {id: design, path: '/search?category=design', status: local_scaffold}
+  - {id: sources, path: '/sources', status: planned}
+  - {id: source_admin, path: '/admin/sources', status: planned}
+  - {id: index_jobs, path: '/admin/jobs', status: planned}
+  - {id: analyzer_admin, path: '/admin/analyzers', status: planned}
+
+visual:
+  theme: monochrome
+  font: IBM Plex Sans KR
+  colors:
+    white: 화면과 본문 배경
+    black: 본문과 제목, 주요 버튼, 읽기 진행선
+    gray: 보조 정보, 구분선, 선택 상태 배경
+    red: 덕³ 도장과 오류·위험 표시
+
+design_map:
+  entry: search_results
+  relation_types:
+    leads_to: 이어지는 흐름
+    uses: 사용하는 구성요소·설정
+    specified_by: 설계 근거
+    contracts_with: 데이터 계약
+    operated_by: 운영 절차
+    implemented_in: 구현 계획
+  groups:
+    - id: screens
+      title: 사용자 화면
+      nodes:
+        - {id: home_screen, label: 메인, screen: home, file: index.md, section: 화면 구조}
+        - {id: search_results, label: 검색 결과, screen: search, file: index.md, section: 화면 구조}
+        - {id: document_reader, label: 문서 상세, screen: reader, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
+        - {id: design_catalog, label: 설계 문서 목록, screen: design, file: index.md, section: 문서 읽는 순서}
+        - {id: sources_screen, label: 출처 브라우징, screen: sources, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
+        - {id: connector_admin, label: 커넥터 관리, screen: source_admin, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
+        - {id: jobs_screen, label: 색인 작업 관리, screen: index_jobs, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
+        - {id: analyzer_screen, label: 검색어 분석 실험, screen: analyzer_admin, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
+    - id: components
+      title: 시스템 구성
+      nodes:
+        - {id: ingestion_pipeline, label: 수집·증분 색인, file: dok3search-final-architecture.md, section: 7. 수집 파이프라인과 증분 색인}
+        - {id: search_engine, label: Tantivy 검색, file: dok3search-final-architecture.md, section: 5. Tantivy 색인 및 검색 설계}
+        - id: agent_api
+          label: REST·MCP
+          file: dok3search-final-architecture.md
+          section: '8. 외부 연동: REST, MCP, A2A, ACP'
+        - {id: classification, label: 자동 분류, file: dok3search-final-architecture.md, section: 9. 자동 분류 서브에이전트와 인덱싱 정책}
+    - id: contracts
+      title: 데이터 계약
+      nodes:
+        - {id: search_request, label: 검색 요청, file: contracts/search-request.example.yaml}
+        - {id: search_snapshot, label: 검색 스냅샷, file: contracts/search-snapshot.example.yaml}
+        - {id: document_contract, label: 원문 문서, file: contracts/document.example.yaml}
+        - {id: section_read, label: 문서 절 조회, file: contracts/section-read.example.yaml}
+        - {id: index_job, label: 색인 작업, file: contracts/index-job.example.yaml}
+        - {id: generation_transition, label: 색인 세대 전환, file: contracts/generation-transition.example.yaml}
+    - id: delivery
+      title: 구현과 운영
+      nodes:
+        - {id: roadmap, label: 구현 로드맵, file: dok3search-implementation-roadmap.md, section: 2. 에픽과 작업 분해}
+        - {id: workspace, label: 워크스페이스·계약, file: RUST_WORKSPACE_AND_CONTRACTS.md}
+        - {id: index_operations, label: 전환과 롤백, file: BLUE_GREEN_OPERATIONAL_PROTOCOL.md, section: 롤백}
+        - {id: deployment, label: 폐쇄망 배포, file: dok3search-network-deployment.md, section: 서비스/배포}
+        - {id: search_profiles, label: 검색 프로파일, file: config/search-profiles.example.yaml}
+  edges:
+    - {from: home_screen, to: search_results, relation: leads_to}
+    - {from: home_screen, to: design_catalog, relation: leads_to}
+    - {from: search_results, to: document_reader, relation: leads_to}
+    - {from: search_results, to: search_engine, relation: specified_by}
+    - {from: search_results, to: search_request, relation: contracts_with}
+    - {from: search_results, to: search_snapshot, relation: contracts_with}
+    - {from: search_results, to: roadmap, relation: implemented_in}
+    - {from: document_reader, to: document_contract, relation: contracts_with}
+    - {from: document_reader, to: section_read, relation: contracts_with}
+    - {from: sources_screen, to: ingestion_pipeline, relation: specified_by}
+    - {from: connector_admin, to: ingestion_pipeline, relation: uses}
+    - {from: jobs_screen, to: index_job, relation: contracts_with}
+    - {from: analyzer_screen, to: search_engine, relation: specified_by}
+    - {from: ingestion_pipeline, to: classification, relation: uses}
+    - {from: ingestion_pipeline, to: search_engine, relation: leads_to}
+    - {from: ingestion_pipeline, to: index_job, relation: contracts_with}
+    - {from: ingestion_pipeline, to: document_contract, relation: contracts_with}
+    - {from: search_engine, to: search_profiles, relation: uses}
+    - {from: search_engine, to: index_operations, relation: operated_by}
+    - {from: agent_api, to: search_engine, relation: uses}
+    - {from: agent_api, to: search_request, relation: contracts_with}
+    - {from: agent_api, to: section_read, relation: contracts_with}
+    - {from: index_operations, to: generation_transition, relation: contracts_with}
+    - {from: index_operations, to: deployment, relation: operated_by}
+    - {from: design_catalog, to: roadmap, relation: implemented_in}
+    - {from: roadmap, to: workspace, relation: specified_by}

@@ -1,0 +1,62 @@
+schema_version: '1.0'
+project: dok3search
+updated: '2026-11-22'
+
+entrypoints:
+  - {id: index, title: 설계 인덱스, markdown: index.md, yaml: index.yaml}
+  - {id: map, title: 전체 설계 맵, markdown: map.md, yaml: map.yaml}
+
+document_tree:
+  - id: entrypoints
+    title: 설계 진입점
+    files:
+      - index.md
+      - index.yaml
+      - map.md
+      - map.yaml
+      - README.md
+  - id: architecture
+    title: 아키텍처와 구현 순서
+    files:
+      - dok3search-final-architecture.md
+      - dok3search-implementation-roadmap.md
+      - RUST_WORKSPACE_AND_CONTRACTS.md
+      - REFERENCE_ARCHITECTURES.md
+  - id: operations
+    title: 운영과 사용 안내
+    files:
+      - BLUE_GREEN_OPERATIONAL_PROTOCOL.md
+      - dok3search-network-deployment.md
+      - dok3search-offline-supplychain.md
+      - dok3search-subagents.md
+      - dok3search-product-manual-draft.md
+  - id: reviews
+    title: 설계 검토와 변경 이력
+    files:
+      - DESIGN_REVIEW_AND_FIXES.md
+      - BLUE_GREEN_DESIGN_REVIEW.md
+      - CHANGELOG.md
+      - dok3search-final-architecture-download.md
+  - id: config
+    title: 설정 예시
+    files:
+      - config/server.example.yaml
+      - config/sources.example.yaml
+      - config/indexing.example.yaml
+      - config/index-generations.example.yaml
+      - config/search-profiles.example.yaml
+      - config/workspace.example.yaml
+      - config/classification.example.yaml
+      - config/reference-patterns.example.yaml
+      - config/offline-bundle.example.yaml
+  - id: contracts
+    title: 데이터와 API 계약 예시
+    files:
+      - contracts/document.example.yaml
+      - contracts/search-request.example.yaml
+      - contracts/search-snapshot.example.yaml
+      - contracts/section-read.example.yaml
+      - contracts/index-job.example.yaml
+      - contracts/index-operation.example.yaml
+      - contracts/generation-transition.example.yaml
+      - contracts/subagent-task.example.yaml
