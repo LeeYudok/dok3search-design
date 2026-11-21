@@ -19,7 +19,7 @@ screens:
   - {id: design, path: '/search?category=design', status: implemented, formats: [Markdown, YAML]}
   - {id: guide_topics, path: '/search?category=guide', status: implemented, topics: [rust, go]}
   - {id: rust_topic, path: '/search?category=guide&topic=rust', status: bundled_reference, chapters: 666}
-  - {id: go_topic, path: '/search?category=guide&topic=go', status: bundled_reference, chapters: 51}
+  - {id: go_topic, path: '/search?category=guide&topic=go', status: bundled_reference, chapters: 59}
   - {id: sources, path: '/sources', status: planned}
   - {id: source_admin, path: '/admin/sources', status: planned}
   - {id: index_jobs, path: '/admin/jobs', status: planned}

@@ -14,7 +14,7 @@ REST 요청 본문이나 조회 인자의 형식이 잘못되면 HTTP 400과 `IN
 
 검색의 상위 분류는 개발 가이드(`guide`), 운영 매뉴얼(`manual`), 코드 레퍼런스(`code`), 내부 규정(`policy`), 설계 문서(`design`)다. Rust와 Go는 별도 상위 분류로 만들지 않고 개발 가이드의 주제로 나눈다. 표준 검색 주소는 `/search?category=guide&topic=rust`와 `/search?category=guide&topic=go`다. 예전 `/search?category=rust`와 `/search?category=go` 주소는 해당 주제로 이어진다.
 
-[Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/21)는 프런트 정적 자료로 검색한다. Rust 자료는 Comprehensive Rust 한국어판 337장, Rust 공식 책 111장, Rust Reference 120장, Cargo Book 98장으로 총 666장이다. Go 자료는 언어 명세, Go Modules Reference, Effective Go를 합쳐 51장이다. 자료 본문·예제 코드·그림은 로컬에서 열 수 있고, 각 자료의 출처와 라이선스를 확인할 수 있다.
+[Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/21)는 프런트 정적 자료로 검색한다. Rust 자료는 Comprehensive Rust 한국어판 337장, Rust 공식 책 111장, Rust Reference 120장, Cargo Book 98장으로 총 666장이다. Go 자료는 공식 문서 51장, 한국어 실무 가이드 5편, Learn Go with Tests 영문 실습 3편으로 총 59편이다. 실습은 요청 취소, HTTP 핸들러, 시간 테스트를 다룬다. `testing/synctest` 실습은 Go 1.25 이상이 필요하다. 자료 본문·예제 코드·그림은 로컬에서 열 수 있고, 각 자료의 출처와 라이선스를 확인할 수 있다.
 
 문서 본문의 외부 URL은 에어갭 환경에서 열 수 없으므로 클릭 가능한 링크로 렌더하지 않는다. 출처 텍스트와 `외부` 표기로 남기고, 로컬 문서·절·번들 라이선스 파일만 이동을 허용한다. 이 규칙은 문서 열람이 외부 DNS나 HTTP 요청을 시도하지 않게 한다.
 
@@ -30,7 +30,7 @@ Rust Reference와 Cargo Book은 [Rust 1.100.0 공식 문서](https://doc.rust-la
 | 검색 결과 | `/search` | 검색 결과를 카테고리로 좁힌다. 결과는 15건씩 표시하고 요약은 두 줄까지 보여 준다. |
 | 개발 가이드 | `/search?category=guide` | 검색어로 개발 문서를 찾고 Rust·Go 주제를 선택한다. |
 | Rust 주제 | `/search?category=guide&topic=rust` | Rust 공식 참고 자료 666장을 검색·열람한다. |
-| Go 주제 | `/search?category=guide&topic=go` | Go 공식 참고 자료 51장을 검색·열람한다. |
+| Go 주제 | `/search?category=guide&topic=go` | Go 참고 자료와 실습 59편을 검색·열람한다. |
 | 문서 상세 | `/docs/:id` | 제목, 출처, 요약, 본문을 읽는다. 읽기 진행선과 현재 절을 표시한다. |
 | 설계 문서 | `/search?category=design` | 인덱스와 맵을 한 건씩 표시한다. 상세에서 Markdown과 YAML을 전환한다. |
 

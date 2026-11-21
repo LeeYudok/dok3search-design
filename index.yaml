@@ -23,7 +23,7 @@ implementation:
           - 'Cargo Book: 98장'
       go:
         path: '/search?category=guide&topic=go'
-        chapters: 51
+        chapters: 59
         sources:
           - 'Go 언어 명세'
           - 'Go Modules Reference'
