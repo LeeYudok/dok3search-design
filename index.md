@@ -10,6 +10,8 @@ dok3search는 금융권 Windows 폐쇄망에서 쓰는 검색 도구다. 사람�
 
 [구현 저장소의 P0-3](https://github.com/LeeYudok/dok3search/pull/12)은 Axum 인메모리 저장소로 검색, 문서 상세, 절 조회를 제공한다. React는 이 API에 연결하고, 개발 서버에서 API에 연결할 수 없으면 내장 샘플을 사용한다. Tantivy 색인과 MCP는 [구현 로드맵](dok3search-implementation-roadmap.md)의 후속 단계에 있다.
 
+REST 요청 본문이나 조회 인자의 형식이 잘못되면 HTTP 400과 `INVALID_INPUT` 코드를 담은 JSON을 반환한다. [API 입력 오류 계약](https://github.com/LeeYudok/dok3search/pull/14)
+
 [Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/8)는 프런트에 포함한다. 두 카테고리에서 검색·열람을 로컬로 처리하며, 각 문서는 Markdown 원문과 예제 코드, 출처와 라이선스를 포함한다.
 
 ## 화면 구조
