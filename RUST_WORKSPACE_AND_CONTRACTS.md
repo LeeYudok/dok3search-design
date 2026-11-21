@@ -10,10 +10,10 @@
 - **`dok3-parser` (P1-1, `main` 머지됨 [PR #24](https://github.com/LeeYudok/dok3search/pull/24), `dcadcb6`)**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 평탄 타일링 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 구현했다.
 - **`dok3-index` (P1-3, [PR #26](https://github.com/LeeYudok/dok3search/pull/26) 리뷰/승인 대기)**: Tantivy 0.27 기반 `TantivyIndex`(`SearchPort`), `dok3_text` + 2~3 n-gram `dok3_ngram` 토크나이저, 단일 `Mutex<IndexWriter>`, `ReloadPolicy::Manual` 및 `reload()` 발행 잠금 일원화, 히트·카테고리 집계 선 ACL 적용을 구현했다.
 - **`dok3-connectors` (P1-4a, [PR #29](https://github.com/LeeYudok/dok3search/pull/29) LGTM·승인 대기)**: 로컬 디렉터리 결정적 순회·숨김/심볼릭 링크 차단·크기 상한 skip 처리 및 337건 오프라인 Markdown 샘플 수집·파싱 통합 테스트를 구현했다.
-- **`dok3-index-manager` (P1-4b, `#32` Codex 구현 진행 중)**: Blue-Green 세대 전환 상태 머신·크래시 복구·롤백 저널 catch-up 가드·`ReaderLease` 참조 보호·8종 실패 주입 테스트를 구현 중이다.
-- **`dok3-analyzer` (P2-1, [PR #31](https://github.com/LeeYudok/dok3search/pull/31) Codex 구현·LGTM 승인 대기)**: 외부 크레이트 0개 순수 Rust `camelCase`/`PascalCase`/`snake_case`/`::`/오류코드 분해 및 문자 단위 2~3 n-gram 분석기를 구현했다.
-- **`dok3-agent` (P2-5, [PR #34](https://github.com/LeeYudok/dok3search/pull/34) 리뷰/승인 대기)**: MCP JSON-RPC 2.0 stdio + Streamable HTTP(`POST /mcp`) 서버 어댑터(`2025-11-25` `initialize` 및 `2026-07-28` `server/discover`/`MCP-Protocol-Version` 동시 호환), SSOT 7개 `kb_*` 도구, `Principal` 기본 거부 ACL 강제를 구현했다.
-- **`dok3-benchmark` (P2-6, `#35` Codex 연속 배정 대기)**: PoC 검색 품질(Recall@10·MRR@10) 및 동시 검색 부하 P50/P95/P99 측정 하네스를 배정했다.
+- **`dok3-index-manager` (P1-4b, [PR #36](https://github.com/LeeYudok/dok3search/pull/36) Codex 구현·LGTM 승인 대기)**: Blue-Green 세대 전환 상태 머신·단일 writer 파일 제어 포인터(`generation_state.json`)·크래시 복구·롤백 저널 catch-up 가드·`ReaderLease` 참조 보호·8종 실패 주입 테스트(11/11)를 구현했다.
+- **`dok3-analyzer` (P2-1, [PR #31](https://github.com/LeeYudok/dok3search/pull/31) Codex 구현·LGTM 승인 대기)**: 외부 크레이트 0개 순수 Rust `camelCase`/`PascalCase`/`snake_case`/`::`/오류코드 분해 및 문자 단위 2~3 n-gram 분석기(6/6)를 구현했다.
+- **`dok3-agent` (P2-5, [PR #34](https://github.com/LeeYudok/dok3search/pull/34) 리뷰/승인 대기)**: MCP JSON-RPC 2.0 stdio + Streamable HTTP(`POST /mcp`) 서버 어댑터(`2025-11-25` `initialize` 및 `2026-07-28` `server/discover`/`Mcp-Method`/`Mcp-Name`/`-32020`/`-32022` 동시 호환), SSOT 7개 `kb_*` 도구, 요청별 `PrincipalResolver` ACL 강제를 구현했다.
+- **`dok3-benchmark` (P2-6, [PR #37](https://github.com/LeeYudok/dok3search/pull/37) Codex 구현·LGTM 승인 대기)**: PoC 검색 품질(Recall@K·MRR@K·ACL 누출 검사) 및 동시 검색 부하(P50/P95/P99·QPS) 측정 하네스·CLI(1 unit + 7 contract)를 구현했다.
 
 ```text
 dok3search/
