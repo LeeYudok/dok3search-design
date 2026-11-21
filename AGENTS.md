@@ -22,7 +22,7 @@
 
 전체 협업 프로토콜 원본은 [`LeeYudok/a2a-acp-bridge#8`](https://github.com/LeeYudok/a2a-acp-bridge/issues/8)(1~5절) 이다.
 
-- **N-에이전트 확장**: `agy`, `codex`, `claude` 외에 `hermes`, `opencode` 등 어떤 CLI/MCP 에이전트도 소문자 slug(`^[a-z0-9][a-z0-9-]*$`) ID 와 `owner:<agent_id>` 라벨로 동일하게 참여할 수 있다.
+- **N-에이전트 확장**: `agy`, `codex`, `claude` 외에 `hermes`, `opencode` 등 어떤 CLI/MCP 에이전트도 소문자 slug(`^[a-z0-9][a-z0-9-]{0,23}$`, 최대 24자) ID 와 `owner:<agent_id>` 라벨로 동일하게 참여할 수 있다.
 - **작업 핸드오프·이어받기**: 담당 에이전트가 중단·토큰 소진 시 변경을 커밋·푸시하고 `handoff` 라벨로 전환한다. 무응답·오류·할당량 소진 시 남은 에이전트가 이슈 예고 후 원브랜치 위에서(자기 워크트리로 받아) 이어받는다.
 - **오케스트레이터 무특권 순환 지휘(Failover)**:
   - 특정 에이전트가 영구 지휘권을 독점하지 않으며, 단 한 명만 현재 지휘자 리스(`term` + `lease_until`)를 가진다.

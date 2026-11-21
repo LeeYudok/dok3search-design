@@ -6,9 +6,10 @@
 아래 경로는 [구현 저장소](https://github.com/LeeYudok/dok3search)의 구성이다. P0 구현은 `dok3-core`·`dok3-domain`의 계약 타입과 `dok3-search`·`dok3-api`·`dok3-server`의 인메모리 HTTP 검색을 제공한다([PR #12](https://github.com/LeeYudok/dok3search/pull/12), [PR #14](https://github.com/LeeYudok/dok3search/pull/14)).
 
 ### P1 구현 현황 (2026-11-22 기준)
-- **`dok3-storage` (P1-2, `main` 머지됨 [PR #22](https://github.com/LeeYudok/dok3search/pull/22))**: `FileDocumentStore`(SHA-256 `objects/<sha256>` + 원자 `documents.json`)와 `FileChangeJournal`(`fsync` `journal.jsonl` + torn-write 복구)을 구현했다. 교차 리뷰에서 도출된 단일 writer 락·저널 append 보강·SQLite 메타데이터 전환은 후속 이슈 [#23](https://github.com/LeeYudok/dok3search/issues/23)으로 추적한다.
-- **`dok3-parser` (P1-1, [PR #24](https://github.com/LeeYudok/dok3search/pull/24) 리뷰 완료/승인 대기)**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 평탄 타일링 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 구현했다.
+- **`dok3-storage` (P1-2, `main` 머지됨 [PR #22](https://github.com/LeeYudok/dok3search/pull/22))**: `FileDocumentStore`(SHA-256 `objects/<sha256>` + 원자 `documents.json`)와 `FileChangeJournal`(`fsync` `journal.jsonl` + torn-write 복구)을 구현했다. 교차 리뷰에서 도출된 단일 writer 락·저널 append 롤백·메타 갱신·손상 복구·SQLite 전환 ADR([0001](https://github.com/LeeYudok/dok3search/blob/main/docs/adr/0001-p1-file-storage-and-sqlite-migration.md))은 [PR #27](https://github.com/LeeYudok/dok3search/pull/27)(`#23`)로 승인 대기 중이다.
+- **`dok3-parser` (P1-1, `main` 머지됨 [PR #24](https://github.com/LeeYudok/dok3search/pull/24), `dcadcb6`)**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 평탄 타일링 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 구현했다.
 - **`dok3-index` (P1-3, [PR #26](https://github.com/LeeYudok/dok3search/pull/26) 리뷰/승인 대기)**: Tantivy 0.27 기반 `TantivyIndex`(`SearchPort`), `dok3_text` + 2~3 n-gram `dok3_ngram` 토크나이저, 단일 `Mutex<IndexWriter>`, `ReloadPolicy::Manual`, 히트·카테고리 집계 선 ACL 적용을 구현했다.
+- **`dok3-connectors` (P1-4a, [PR #29](https://github.com/LeeYudok/dok3search/pull/29) 리뷰/승인 대기)**: 로컬 디렉터리 결정적 순회·숨김/심볼릭 링크 차단·크기 상한 skip 처리 및 337건 오프라인 Markdown 샘플 수집·파싱 통합 테스트를 구현했다.
 
 ```text
 dok3search/
@@ -20,7 +21,7 @@ dok3search/
       dok3-core/             # 오류(Dok3Error), 설정, 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait
       dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2); SQLite 메타·락 보강(#23)
-      dok3-connectors/       # 파일, Git, SVN, DB 소스 포트
+      dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a), 향후 Git, SVN, DB 소스 확장
       dok3-parser/           # MarkdownParser(P1-1 완료), 향후 HTML/PDF/DOCX/Tree-sitter
       dok3-analyzer/         # 한국어/영어/코드 분석기
       dok3-index/            # TantivyIndex(SearchPort), schema/tokenizer, 단일 writer, 수동 reader reload(P1-3)
