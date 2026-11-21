@@ -16,6 +16,8 @@ REST 요청 본문이나 조회 인자의 형식이 잘못되면 HTTP 400과 `IN
 
 [Rust·Go 참고 자료](https://github.com/LeeYudok/dok3search/issues/21)는 프런트 정적 자료로 검색한다. Rust 자료는 Comprehensive Rust 한국어판 337장, Rust 공식 책 111장, Rust Reference 120장, Cargo Book 98장으로 총 666장이다. Go 자료는 언어 명세, Go Modules Reference, Effective Go를 합쳐 51장이다. 자료 본문·예제 코드·그림은 로컬에서 열 수 있고, 각 자료의 출처와 라이선스를 확인할 수 있다.
 
+문서 본문의 외부 URL은 에어갭 환경에서 열 수 없으므로 클릭 가능한 링크로 렌더하지 않는다. 출처 텍스트와 `외부` 표기로 남기고, 로컬 문서·절·번들 라이선스 파일만 이동을 허용한다. 이 규칙은 문서 열람이 외부 DNS나 HTTP 요청을 시도하지 않게 한다.
+
 Rust Reference와 Cargo Book은 [Rust 1.100.0 공식 문서](https://doc.rust-lang.org/1.100.0/) 설치본에서 가져온다. Go 언어 명세는 [Go 1.26.2 SDK](https://go.dev/ref/spec)에서 가져온다. Comprehensive Rust 문서에는 CC BY 4.0, 예제 코드에는 Apache 2.0을 적용한다. Rust 문서는 MIT 또는 Apache 2.0, Go 문서는 CC BY 4.0, 예제 코드는 BSD 3-Clause를 따른다. 각 코퍼스의 README와 `provenance.json`에 입력 버전, 출처, 라이선스, 해시를 기록한다. 원본과 라이선스 전문은 [구현 저장소의 참고 자료 안내](https://github.com/LeeYudok/dok3search#폐쇄망-개발-참고-자료)에서 확인한다.
 
 이 주제 자료는 현재 REST 검색·문서 API에 적재하지 않는다. `topic`은 프런트에서 정적 자료를 고르는 URL 필터다. 백엔드 API에는 상위 분류인 `guide`만 요청한다.

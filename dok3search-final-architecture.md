@@ -305,7 +305,7 @@ pub struct SourceBatch {
 - `ProgramData/dok3search/` 아래 `config`, `data/originals`, `data/indexes`, `data/meta.db`, `logs`, `backups` 구분. 실행 계정 최소 권한.
 - 내부 전용 바인딩, HTTPS(필요 시 내부 리버스 프록시), 사내 인증과 ACL, 사용자 단위 감사, 쿼리/원문 제공 양쪽에서 권한 확인.
 - DB 연결 비밀번호는 OS 보호 비밀 저장소 또는 승인된 비밀 관리 시스템에서 주입. 설정 파일 평문 저장 금지.
-- 문서 HTML/Markdown은 렌더 전에 sanitize하며, 외부 이미지·JS 로딩과 프롬프트 인젝션을 통제한다.
+- 문서 HTML/Markdown은 렌더 전에 sanitize하며, 외부 이미지·JS 로딩과 프롬프트 인젝션을 통제한다. Markdown의 외부 URL은 클릭 가능한 링크로 만들지 않고 출처 표기로 남기며, 로컬 문서·절·번들 라이선스 파일만 이동을 허용한다.
 - Tantivy Writer는 인덱스별 단일 소유자, 읽기 Reader는 병렬. 커밋 및 Reader reload 시점을 명시.
 - 검색용 인덱스를 원본과 분리하여 **재생성 가능**하게 유지. 인덱스 백업은 일관된 스냅샷/중지 백업 방식으로 검증.
 - 폐쇄망 빌드: Cargo.lock, Cargo vendor/내부 레지스트리, npm lockfile+내부 패키지 미러, 서명/해시/SBOM/라이선스 목록을 반입 패키지에 포함.
