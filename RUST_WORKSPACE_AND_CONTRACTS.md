@@ -3,25 +3,28 @@
 ## 원칙
 전체 crate 구조·핵심 도메인 타입·포트(Trait)·계약 테스트를 먼저 고정한다. **수백 개의 빈 함수나 실행 경로의 `todo!()`는 만들지 않는다.** 기능별 Vertical Slice로 RED → GREEN → REFACTOR를 반복한다.
 
+아래 경로는 [구현 저장소](https://github.com/LeeYudok/dok3search)의 구성이다. P0 구현은 `dok3-core`·`dok3-domain`의 계약 타입과 `dok3-search`·`dok3-api`·`dok3-server`의 인메모리 HTTP 검색을 제공한다.
+
 ```text
 dok3search/
-  Cargo.toml                 # workspace members, resolver
-  Cargo.lock
-  rust-toolchain.toml
-  crates/
-    dok3-core/               # 오류, 설정, 공통 타입
-    dok3-domain/             # DocumentId, Revision, SectionId, GenerationId
-    dok3-storage/            # SQLite 작업저널/메타데이터/활성 세대 상태
-    dok3-connectors/         # 파일, Git, SVN, DB 소스 포트
-    dok3-parser/             # MD, HTML, PDF, DOCX, Tree-sitter
-    dok3-analyzer/           # 한국어/영어/코드 분석기
-    dok3-index/              # Tantivy writer, schema, reader
-    dok3-index-manager/      # 세대 빌드/검증/활성화/복구
-    dok3-search/             # 검색, ACL 필터, 원문 접근
-    dok3-agent/              # MCP 우선, A2A/ACP 후속
-    dok3-api/                # Axum 라우터/인증/관리 API
-    dok3-benchmark/          # 재현 가능한 부하 생성/측정
-    dok3-server/             # Windows Service 진입점
+  backend/rust/
+    Cargo.toml               # workspace members, resolver
+    Cargo.lock
+    rust-toolchain.toml
+    crates/
+      dok3-core/             # 오류, 설정, 공통 타입
+      dok3-domain/           # DocumentId, Revision, SectionId, GenerationId
+      dok3-storage/          # SQLite 작업저널/메타데이터/활성 세대 상태
+      dok3-connectors/       # 파일, Git, SVN, DB 소스 포트
+      dok3-parser/           # MD, HTML, PDF, DOCX, Tree-sitter
+      dok3-analyzer/         # 한국어/영어/코드 분석기
+      dok3-index/            # Tantivy writer, schema, reader
+      dok3-index-manager/    # 세대 빌드/검증/활성화/복구
+      dok3-search/           # 검색, ACL 필터, 원문 접근
+      dok3-agent/            # MCP 우선, A2A/ACP 후속
+      dok3-api/              # Axum 라우터와 검색·문서 조회
+      dok3-benchmark/        # 재현 가능한 부하 생성/측정
+      dok3-server/           # HTTP 서버 진입점
   frontend/                  # React + TypeScript
   config/                    # 예시 YAML
   contracts/                 # YAML 계약 및 버전
