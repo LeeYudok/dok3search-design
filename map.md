@@ -2,6 +2,8 @@
 
 화면, 시스템 구성, 데이터 계약, 운영 절차가 어떻게 이어지는지 기록한다. 도구에서 관계를 읽을 때는 [map.yaml](map.yaml)을 사용한다. 자료의 전체 목록은 [index.md](index.md)와 [index.yaml](index.yaml)에 있다.
 
+검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 자료는 개발 가이드 안의 주제로 나눈다. 정적 자료는 프런트에서 검색하며 REST API 계약에는 `topic`을 보내지 않는다.
+
 ## 설계 맵 읽는 법
 
 작업 대상의 ID부터 찾는다. 연결 관계에서 관련 항목을 고르고, 각 항목의 근거 문서나 절을 읽는다.
@@ -16,8 +18,9 @@
 | 검색 결과 | `search_results` | `/search` | 인메모리 REST 연결 | [화면 구조](index.md#화면-구조) |
 | 문서 상세 | `document_reader` | `/docs/:id` | 인메모리 REST 연결 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 설계 문서 목록 | `design_catalog` | `/search?category=design` | 형식별 원문 열람 | [화면 구조](index.md#화면-구조) |
-| Rust 자료 | `rust_reference` | `/search?category=rust` | 로컬 검색·열람 | [현재 구현](index.md#현재-구현) |
-| Go 자료 | `go_reference` | `/search?category=go` | 로컬 검색·열람 | [현재 구현](index.md#현재-구현) |
+| 개발 가이드 | `guide_topics` | `/search?category=guide` | Rust·Go 세부 주제를 고른다 | [화면 구조](index.md#화면-구조) |
+| Rust 주제 | `rust_topic` | `/search?category=guide&topic=rust` | 정적 자료 로컬 검색·열람, 666장 | [현재 구현](index.md#현재-구현) |
+| Go 주제 | `go_topic` | `/search?category=guide&topic=go` | 정적 자료 로컬 검색·열람, 59편 | [현재 구현](index.md#현재-구현) |
 | 출처 브라우징 | `sources_screen` | `/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 커넥터 관리 | `connector_admin` | `/admin/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 색인 작업 관리 | `jobs_screen` | `/admin/jobs` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
@@ -59,11 +62,12 @@
 |---|---|---|
 | 메인 | 이어지는 흐름 | 검색 결과 |
 | 메인 | 이어지는 흐름 | 설계 문서 목록 |
-| 메인 | 이어지는 흐름 | Rust 자료 |
-| 메인 | 이어지는 흐름 | Go 자료 |
+| 메인 | 이어지는 흐름 | 개발 가이드 |
+| 개발 가이드 | 이어지는 흐름 | Rust 주제 |
+| 개발 가이드 | 이어지는 흐름 | Go 주제 |
 | 검색 결과 | 이어지는 흐름 | 문서 상세 |
-| Rust 자료 | 이어지는 흐름 | 문서 상세 |
-| Go 자료 | 이어지는 흐름 | 문서 상세 |
+| Rust 주제 | 이어지는 흐름 | 문서 상세 |
+| Go 주제 | 이어지는 흐름 | 문서 상세 |
 | 검색 결과 | 설계 근거 | Tantivy 검색 |
 | 검색 결과 | 데이터 계약 | 검색 요청 |
 | 검색 결과 | 데이터 계약 | 검색 스냅샷 |

@@ -17,12 +17,18 @@ screens:
   - {id: search, path: '/search', status: local_rest, page_size: 15, snippet_lines: 2}
   - {id: reader, path: '/docs/:id', status: local_rest}
   - {id: design, path: '/search?category=design', status: implemented, formats: [Markdown, YAML]}
-  - {id: rust_reference, path: '/search?category=rust', status: bundled_reference}
-  - {id: go_reference, path: '/search?category=go', status: bundled_reference}
+  - {id: guide_topics, path: '/search?category=guide', status: implemented, topics: [rust, go]}
+  - {id: rust_topic, path: '/search?category=guide&topic=rust', status: bundled_reference, chapters: 666}
+  - {id: go_topic, path: '/search?category=guide&topic=go', status: bundled_reference, chapters: 59}
   - {id: sources, path: '/sources', status: planned}
   - {id: source_admin, path: '/admin/sources', status: planned}
   - {id: index_jobs, path: '/admin/jobs', status: planned}
   - {id: analyzer_admin, path: '/admin/analyzers', status: planned}
+
+search_taxonomy:
+  top_level_categories: [guide, manual, code, policy, design]
+  topics_by_category:
+    guide: [rust, go]
 
 visual:
   theme: monochrome
@@ -50,8 +56,9 @@ design_map:
         - {id: search_results, label: 검색 결과, screen: search, file: index.md, section: 화면 구조}
         - {id: document_reader, label: 문서 상세, screen: reader, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
         - {id: design_catalog, label: 설계 문서 목록, screen: design, file: index.md, section: 화면 구조}
-        - {id: rust_reference, label: Rust 자료, screen: rust_reference, file: index.md, section: 현재 구현}
-        - {id: go_reference, label: Go 자료, screen: go_reference, file: index.md, section: 현재 구현}
+        - {id: guide_topics, label: 개발 가이드, screen: guide_topics, file: index.md, section: 화면 구조}
+        - {id: rust_topic, label: Rust 주제, screen: rust_topic, file: index.md, section: 현재 구현}
+        - {id: go_topic, label: Go 주제, screen: go_topic, file: index.md, section: 현재 구현}
         - {id: sources_screen, label: 출처 브라우징, screen: sources, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
         - {id: connector_admin, label: 커넥터 관리, screen: source_admin, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
         - {id: jobs_screen, label: 색인 작업 관리, screen: index_jobs, file: dok3search-final-architecture.md, section: 6. 블로그형 React 검색/원문 열람 UI}
@@ -86,11 +93,12 @@ design_map:
   edges:
     - {from: home_screen, to: search_results, relation: leads_to}
     - {from: home_screen, to: design_catalog, relation: leads_to}
-    - {from: home_screen, to: rust_reference, relation: leads_to}
-    - {from: home_screen, to: go_reference, relation: leads_to}
+    - {from: home_screen, to: guide_topics, relation: leads_to}
+    - {from: guide_topics, to: rust_topic, relation: leads_to}
+    - {from: guide_topics, to: go_topic, relation: leads_to}
     - {from: search_results, to: document_reader, relation: leads_to}
-    - {from: rust_reference, to: document_reader, relation: leads_to}
-    - {from: go_reference, to: document_reader, relation: leads_to}
+    - {from: rust_topic, to: document_reader, relation: leads_to}
+    - {from: go_topic, to: document_reader, relation: leads_to}
     - {from: search_results, to: search_engine, relation: specified_by}
     - {from: search_results, to: search_request, relation: contracts_with}
     - {from: search_results, to: search_snapshot, relation: contracts_with}

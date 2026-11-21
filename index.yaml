@@ -6,11 +6,34 @@ implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
   merged_phase: 'P0-3'
   merged_reference: 'https://github.com/LeeYudok/dok3search/pull/12'
-  local_search_backend: in-memory-fake
+  local_search_backend: in-memory
   api_input_error_reference: 'https://github.com/LeeYudok/dok3search/pull/14'
   bundled_references:
-    issue: 'https://github.com/LeeYudok/dok3search/issues/8'
-    categories: [rust, go]
+    issue: 'https://github.com/LeeYudok/dok3search/issues/21'
+    category: guide
+    topic_parameter: topic
+    topics:
+      rust:
+        path: '/search?category=guide&topic=rust'
+        chapters: 666
+        sources:
+          - 'Comprehensive Rust 한국어판: 337장'
+          - 'Rust Book: 111장'
+          - 'Rust Reference: 120장'
+          - 'Cargo Book: 98장'
+      go:
+        path: '/search?category=guide&topic=go'
+        chapters: 59
+        sources:
+          - 'Go 언어 명세'
+          - 'Go Modules Reference'
+          - 'Effective Go'
+
+search_taxonomy:
+  top_level_categories: [guide, manual, code, policy, design]
+  topic_parameter: topic
+  topics_by_category:
+    guide: [rust, go]
 
 entrypoints:
   - {id: index, title: 설계 인덱스, markdown: index.md, yaml: index.yaml}
