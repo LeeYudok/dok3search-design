@@ -1,5 +1,13 @@
 # 변경 이력
 
+## v1.6 — 2026-11-22
+- P2 런타임 배선 완료 반영 (`dok3search` `main` `d26bc1f`):
+  - 설계 사본 `v1.5` 37개 파일 및 `provenance.json` 동기화 ([PR #53](https://github.com/LeeYudok/dok3search/pull/53))
+  - `dok3-index` + `dok3-analyzer` `SCHEMA_VERSION = 2` 통합 및 `dok3-benchmark` 비교 (`Recall@5`·`MRR@5` `0.7143 → 1.0000`, [PR #56](https://github.com/LeeYudok/dok3search/pull/56))
+  - `DOK3_DATA_DIR` 영속 스토어·변경 저널·`dok3-index-manager` 세대 전환(`tantivy-persistent`, [PR #54](https://github.com/LeeYudok/dok3search/pull/54))
+  - `dok3-agent` `POST /mcp` Streamable HTTP·`--mcp-stdio` 및 `dok3-api::build_router_with_extra` 배선 ([PR #55](https://github.com/LeeYudok/dok3search/pull/55))
+- `index.yaml` (`merged_phase: 'P2-wiring'`, `index_schema_version: '2'`, `DOK3_DATA_DIR`·`mcp_transports`), `index.md`, `dok3search-implementation-roadmap.md`, `RUST_WORKSPACE_AND_CONTRACTS.md`, `README.md` 현행화 및 후속 스프린트(`P2-2`·`P2-4`·`P3-1`) 반영
+
 ## v1.5 — 2026-11-22
 - P1·P2 크레이트(`dok3-storage` PR #22·#27, `dok3-parser` PR #24, `dok3-index` PR #26, `dok3-connectors` PR #29, `dok3-analyzer` PR #31, `dok3-agent` PR #34, `dok3-index-manager` PR #36, `dok3-benchmark` PR #37) 및 `dok3-server` `DOK3_SOURCE_DIR` 기반 로컬 Markdown `tantivy-local` 색인 경로(PR #43, 컴파일 수정 PR #46), GitHub Actions 필수 체크(`rust-fmt`, `rust-clippy`, `rust-test`, `frontend-build`, PR #48) `main` 머지 상태 반영
 - `index.yaml`(`implementation.merged_phase: 'P1-4'`, `document_tree`에 `AGENTS.md` 등록), `index.md`, `dok3search-implementation-roadmap.md`, `RUST_WORKSPACE_AND_CONTRACTS.md`, `README.md` 통합 현행화
