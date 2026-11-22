@@ -4,23 +4,31 @@ updated: '2026-11-22'
 
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
-  merged_phase: 'P1-4'
-  merged_phase_status: partial
-  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/43'
-  local_search_backend: tantivy-local
+  merged_phase: 'P2-wiring'
+  merged_phase_status: completed
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/55'
+  design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/53'
+  index_schema_version: '2'
+  local_search_backend: tantivy-persistent
+  ephemeral_local_search_backend: tantivy-local
   fallback_search_backend: in-memory-fake
   local_source_env: DOK3_SOURCE_DIR
+  local_data_env: DOK3_DATA_DIR
+  mcp_transports:
+    - 'POST /mcp'
+    - '--mcp-stdio'
   ci_reference: 'https://github.com/LeeYudok/dok3search/pull/48'
   api_input_error_reference: 'https://github.com/LeeYudok/dok3search/pull/14'
   merged_crates:
-    - 'dok3-storage (P1-2, PR #22·#27)'
+    - 'dok3-storage (P1-2, PR #22·#27; P2-wiring PR #54)'
     - 'dok3-parser (P1-1, PR #24)'
-    - 'dok3-index (P1-3, PR #26)'
+    - 'dok3-index (P1-3, PR #26; analyzer v2 통합 PR #56)'
     - 'dok3-connectors (P1-4a, PR #29)'
-    - 'dok3-analyzer (P2-1, PR #31)'
-    - 'dok3-agent (P2-5, PR #34)'
-    - 'dok3-index-manager (P1-4b, PR #36)'
-    - 'dok3-benchmark (P2-6, PR #37)'
+    - 'dok3-analyzer (P2-1, PR #31; index 통합 PR #56)'
+    - 'dok3-agent (P2-5, PR #34; server/api 배선 PR #55)'
+    - 'dok3-index-manager (P1-4b, PR #36; DOK3_DATA_DIR 배선 PR #54)'
+    - 'dok3-benchmark (P2-6, PR #37; v2 비교 회귀 PR #56)'
+    - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55)'
   bundled_references:
     issue: 'https://github.com/LeeYudok/dok3search/issues/21'
     category: guide

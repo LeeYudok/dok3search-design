@@ -1,4 +1,4 @@
-# dok3search 최종 설계 패키지 v1.5
+# dok3search 최종 설계 패키지 v1.6
 
 **2026-11-22 현행화 / Markdown + YAML**
 
@@ -8,7 +8,7 @@
 
 ## 현재 구현
 
-[구현 저장소](https://github.com/LeeYudok/dok3search) `main`은 Axum REST API와 React 검색·원문 화면을 연결하고(`127.0.0.1:8080`), P1·P2 핵심 크레이트와 `DOK3_SOURCE_DIR` 기반 로컬 Markdown `tantivy-local` 색인 경로(미지정 시 `in-memory-fake`)를 포함한다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [설계 인덱스](index.md#현재-구현)에 최신 머지 범위와 다음 통합 과제를 기록한다.
+[구현 저장소](https://github.com/LeeYudok/dok3search) `main`(`d26bc1f`)은 Axum REST·`/mcp` Streamable HTTP·`--mcp-stdio`와 React 검색·원문 화면을 연결하고(`127.0.0.1:8080`), `DOK3_SOURCE_DIR`+`DOK3_DATA_DIR` 기반 영속 세대 색인(`tantivy-persistent`, 스키마 `v2`)과 `DOK3_SOURCE_DIR` 단독 인메모리 스냅샷(`tantivy-local`), 내장 샘플(`in-memory-fake`) 모드를 지원한다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [설계 인덱스](index.md#현재-구현)에 최신 머지 범위와 후속 과제(`P2-2`·`P2-4`·`P3-1`)를 기록한다.
 
 ## 우선 읽을 문서
 1. `DESIGN_REVIEW_AND_FIXES.md` — 기존 P0/P1 검토
