@@ -19,10 +19,19 @@ implementation:
   mcp_transports:
     - 'POST /mcp'
     - '--mcp-stdio'
+  persistent_endpoints_require_env:
+    - DOK3_SOURCE_DIR
+    - DOK3_DATA_DIR
+  acl_persistent_endpoints:
+    - 'GET /api/v1/documents/{id}/classification'
+  admin_endpoints_require_env:
+    - DOK3_SOURCE_DIR
+    - DOK3_DATA_DIR
+    - DOK3_ENABLE_ADMIN
   admin_endpoints:
     - 'GET/POST /api/v1/index/jobs'
     - 'GET /api/v1/index/jobs/{job_id}'
-    - 'GET/PATCH /api/v1/documents/{id}/classification'
+    - 'PATCH /api/v1/documents/{id}/classification'
     - 'GET/POST /api/v1/sources'
     - 'DELETE /api/v1/sources/{id}'
   ci_reference: 'https://github.com/LeeYudok/dok3search/pull/48'

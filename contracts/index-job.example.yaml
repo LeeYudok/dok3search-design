@@ -1,12 +1,43 @@
-# Design example: validate against implementation before deployment.
-job_id: job-001
-source_id: internal_pg
-mode: incremental
-checkpoint:
-  updated_at: '2026-11-20T00:00:00Z'
-  pk: '100'
-on_delete: delete_from_index
-retry:
-  max_attempts: 3
-  backoff_seconds: 5
-state: pending
+# Design example: implemented P3 REST contract (`dok3-domain/src/admin.rs`) + planned P4 DB connector sketch.
+implemented_rest_v1:
+  endpoints:
+    list: 'GET /api/v1/index/jobs'
+    trigger: 'POST /api/v1/index/jobs'
+    detail: 'GET /api/v1/index/jobs/{job_id}'
+  requires_env: [DOK3_SOURCE_DIR, DOK3_DATA_DIR, DOK3_ENABLE_ADMIN]
+  trigger_request:
+    source_id: local-markdown # optional; null triggers all registered sources
+    mode: incremental # incremental | full
+  job_record:
+    job_id: job-0001
+    source_id: local-markdown
+    trigger: manual # startup | periodic | manual
+    mode: incremental
+    state: succeeded # pending | running | succeeded | failed
+    started_at_ms: 1795328400000
+    finished_at_ms: 1795328400420
+    indexed_documents: 42
+    rebuilt: true
+    active_generation: gen-000002
+    active_epoch: 2
+    skipped_files: []
+    error: null
+  list_response:
+    jobs: []
+    active_generation: gen-000002
+    active_epoch: 2
+    refresh_interval_secs: 300
+
+planned_db_connector_p4:
+  note: 'P4 DB 커넥터(SQLite·MySQL/MariaDB·PostgreSQL) 증분 체크포인트/재시도 예정 스키마'
+  job_id: job-001
+  source_id: internal_pg
+  mode: incremental
+  checkpoint:
+    updated_at: '2026-11-20T00:00:00Z'
+    pk: '100'
+  on_delete: delete_from_index
+  retry:
+    max_attempts: 3
+    backoff_seconds: 5
+  state: pending
