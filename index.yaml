@@ -4,9 +4,9 @@ updated: '2026-11-22'
 
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
-  merged_phase: 'P2-wiring'
+  merged_phase: 'P3-1-core'
   merged_phase_status: completed
-  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/55'
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/60'
   design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/53'
   index_schema_version: '2'
   local_search_backend: tantivy-persistent
@@ -24,11 +24,12 @@ implementation:
     - 'dok3-parser (P1-1, PR #24)'
     - 'dok3-index (P1-3, PR #26; analyzer v2 통합 PR #56)'
     - 'dok3-connectors (P1-4a, PR #29)'
-    - 'dok3-analyzer (P2-1, PR #31; index 통합 PR #56)'
+    - 'dok3-analyzer (P2-1, PR #31; index 통합 PR #56; P2-2 한국어 정규화 PR #61)'
     - 'dok3-agent (P2-5, PR #34; server/api 배선 PR #55)'
     - 'dok3-index-manager (P1-4b, PR #36; DOK3_DATA_DIR 배선 PR #54)'
     - 'dok3-benchmark (P2-6, PR #37; v2 비교 회귀 PR #56)'
-    - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55)'
+    - 'dok3-search (P2-4 Knowledge Pack 자동 적재·UI/MCP self-search PR #62)'
+    - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55, P3-1 영속 증분 재수집·크래시 복구 PR #60; P2-4 Knowledge Pack 자동 적재 PR #62)'
   bundled_references:
     issue: 'https://github.com/LeeYudok/dok3search/issues/21'
     category: guide

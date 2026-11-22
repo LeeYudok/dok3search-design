@@ -1,4 +1,4 @@
-# dok3search 최종 설계 패키지 v1.6
+# dok3search 최종 설계 패키지 v1.7
 
 **2026-11-22 현행화 / Markdown + YAML**
 
@@ -8,7 +8,7 @@
 
 ## 현재 구현
 
-[구현 저장소](https://github.com/LeeYudok/dok3search) `main`(`d26bc1f`)은 Axum REST·`/mcp` Streamable HTTP·`--mcp-stdio`와 React 검색·원문 화면을 연결하고(`127.0.0.1:8080`), `DOK3_SOURCE_DIR`+`DOK3_DATA_DIR` 기반 영속 세대 색인(`tantivy-persistent`, 스키마 `v2`)과 `DOK3_SOURCE_DIR` 단독 인메모리 스냅샷(`tantivy-local`), 내장 샘플(`in-memory-fake`) 모드를 지원한다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [설계 인덱스](index.md#현재-구현)에 최신 머지 범위와 후속 과제(`P2-2`·`P2-4`·`P3-1`)를 기록한다.
+[구현 저장소](https://github.com/LeeYudok/dok3search) `main`(`e896c47`)은 Axum REST·`/mcp` Streamable HTTP·`--mcp-stdio`와 React 검색·원문 화면을 연결하고(`127.0.0.1:8080`), `DOK3_SOURCE_DIR`+`DOK3_DATA_DIR` 기반 영속 세대 색인(`tantivy-persistent`, 스키마 `v2`)과 `DOK3_SOURCE_DIR` 단독 인메모리 스냅샷(`tantivy-local`), 내장 샘플(`in-memory-fake`) 모드를 지원한다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [PR #61](https://github.com/LeeYudok/dok3search/pull/61)로 한국어 10쿼리 `Recall@5`·`MRR@5`가 `0.20 → 1.00`이 됐고, [PR #62](https://github.com/LeeYudok/dok3search/pull/62)로 자체 운영 매뉴얼이 자동 색인되며 UI·MCP self-search를 통과했다. [PR #60](https://github.com/LeeYudok/dok3search/pull/60)으로 `PersistentRuntime::refresh()`·`ReaderLease`·크래시 복구를 포함한 P3-1 핵심이 완료됐다. [설계 인덱스](index.md#현재-구현)에 최신 머지 범위와 후속 과제(P3-1 워커·P3-2·P3-3)를 기록한다.
 
 ## 우선 읽을 문서
 1. `DESIGN_REVIEW_AND_FIXES.md` — 기존 P0/P1 검토
