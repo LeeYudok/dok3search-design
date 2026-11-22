@@ -1,5 +1,12 @@
 # 변경 이력
 
+## v1.7 — 2026-11-22
+- `dok3search` `main` `e896c47` 기준으로 P2-2·P2-4·P3-1 핵심 완료 상태 반영:
+  - P2-2 한국어 정규화 완료: 오프라인 국문 조사 제거·금융/개발 복합어 정규화, 한국어 골든 40건, 한국어 10쿼리 `Recall@5`/`MRR@5` `0.20 → 1.00`, ACL 위반 0건 ([PR #61](https://github.com/LeeYudok/dok3search/pull/61))
+  - P2-4 자체 운영 매뉴얼 완료: `docs/manual/dok3search-manual.md`(15개 H2 절) Knowledge Pack 자동 적재·UI/MCP self-search 검증 ([PR #62](https://github.com/LeeYudok/dok3search/pull/62))
+  - P3-1 영속 런타임 증분 재수집 핵심 완료: `PersistentRuntime::refresh()`·`RefreshReport`·`ReaderLease` 보호·비호환 세대 격리·저널 정합화·크래시 복구 통합 테스트 3종 ([PR #60](https://github.com/LeeYudok/dok3search/pull/60))
+- `index.yaml`, `index.md`, `README.md`, `dok3search-implementation-roadmap.md`, `RUST_WORKSPACE_AND_CONTRACTS.md` 현행화 및 후속 과제(P3-1 워커·P3-2·P3-3) 반영
+
 ## v1.6 — 2026-11-22
 - P2 런타임 배선 완료 반영 (`dok3search` `main` `d26bc1f`):
   - 설계 사본 `v1.5` 37개 파일 및 `provenance.json` 동기화 ([PR #53](https://github.com/LeeYudok/dok3search/pull/53))
