@@ -5,7 +5,7 @@ updated: '2026-11-22'
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
   merged_phase: 'P2-wiring'
-  merged_phase_status: partial
+  merged_phase_status: completed
   merged_reference: 'https://github.com/LeeYudok/dok3search/pull/55'
   design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/53'
   index_schema_version: '2'
