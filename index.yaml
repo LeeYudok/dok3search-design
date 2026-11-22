@@ -5,6 +5,7 @@ updated: '2026-11-22'
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
   merged_phase: 'P1-4'
+  merged_phase_status: partial
   merged_reference: 'https://github.com/LeeYudok/dok3search/pull/43'
   local_search_backend: tantivy-local
   fallback_search_backend: in-memory-fake
