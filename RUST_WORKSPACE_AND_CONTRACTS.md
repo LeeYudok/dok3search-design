@@ -5,15 +5,17 @@
 
 아래 경로는 [구현 저장소](https://github.com/LeeYudok/dok3search)의 구성이다. P0 구현은 `dok3-core`·`dok3-domain`의 계약 타입과 `dok3-search`·`dok3-api`·`dok3-server`의 인메모리 HTTP 검색을 제공한다([PR #12](https://github.com/LeeYudok/dok3search/pull/12), [PR #14](https://github.com/LeeYudok/dok3search/pull/14)).
 
-### P1·P2 구현 현황 (2026-11-22 기준)
-- **`dok3-storage` (P1-2, `main` 머지됨 [PR #22](https://github.com/LeeYudok/dok3search/pull/22))**: `FileDocumentStore`(SHA-256 `objects/<sha256>` + 원자 `documents.json`)와 `FileChangeJournal`(`fsync` `journal.jsonl` + torn-write 복구)을 구현했다. 교차 리뷰에서 도출된 단일 writer 락·저널 append 롤백·최초 `dir_sync` 재시도·메타 갱신·손상 복구·SQLite 전환 ADR(`docs/adr/0001-p1-file-storage-and-sqlite-migration.md`)은 [PR #27](https://github.com/LeeYudok/dok3search/pull/27)(`#23`)로 승인 대기 중이다.
-- **`dok3-parser` (P1-1, `main` 머지됨 [PR #24](https://github.com/LeeYudok/dok3search/pull/24), `dcadcb6`)**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 평탄 타일링 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 구현했다.
-- **`dok3-index` (P1-3, [PR #26](https://github.com/LeeYudok/dok3search/pull/26) 리뷰/승인 대기)**: Tantivy 0.27 기반 `TantivyIndex`(`SearchPort`), `dok3_text` + 2~3 n-gram `dok3_ngram` 토크나이저, 단일 `Mutex<IndexWriter>`, `ReloadPolicy::Manual` 및 `reload()` 발행 잠금 일원화, 히트·카테고리 집계 선 ACL 적용을 구현했다.
-- **`dok3-connectors` (P1-4a, [PR #29](https://github.com/LeeYudok/dok3search/pull/29) LGTM·승인 대기)**: 로컬 디렉터리 결정적 순회·숨김/심볼릭 링크 차단·크기 상한 skip 처리 및 337건 오프라인 Markdown 샘플 수집·파싱 통합 테스트를 구현했다.
-- **`dok3-index-manager` (P1-4b, [PR #36](https://github.com/LeeYudok/dok3search/pull/36) Codex 구현·LGTM 승인 대기)**: Blue-Green 세대 전환 상태 머신·단일 writer 파일 제어 포인터(`generation_state.json`)·크래시 복구·롤백 저널 catch-up 가드·`ReaderLease` 참조 보호·8종 실패 주입 테스트(11/11)를 구현했다.
-- **`dok3-analyzer` (P2-1, [PR #31](https://github.com/LeeYudok/dok3search/pull/31) Codex 구현·LGTM 승인 대기)**: 외부 크레이트 0개 순수 Rust `camelCase`/`PascalCase`/`snake_case`/`::`/오류코드 분해 및 문자 단위 2~3 n-gram 분석기(6/6)를 구현했다.
-- **`dok3-agent` (P2-5, [PR #34](https://github.com/LeeYudok/dok3search/pull/34) 리뷰/승인 대기)**: MCP JSON-RPC 2.0 stdio + Streamable HTTP(`POST /mcp`) 서버 어댑터(`2025-11-25` `initialize` 및 `2026-07-28` `server/discover`/`Mcp-Method`/`Mcp-Name`/`-32020`/`-32022` 동시 호환), SSOT 7개 `kb_*` 도구, 요청별 `PrincipalResolver` ACL 강제를 구현했다.
-- **`dok3-benchmark` (P2-6, [PR #37](https://github.com/LeeYudok/dok3search/pull/37) Codex 구현·LGTM 승인 대기)**: PoC 검색 품질(Recall@K·MRR@K·ACL 누출 검사) 및 동시 검색 부하(P50/P95/P99·QPS) 측정 하네스·CLI(1 unit + 7 contract)를 구현했다.
+### P1·P2 구현 현황 (`main` 머지 기준, 2026-11-22)
+- **`dok3-storage` (P1-2, `main` 머지됨 [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[PR #27](https://github.com/LeeYudok/dok3search/pull/27))**: `FileDocumentStore`(SHA-256 `objects/<sha256>` + 원자 `documents.json`), `FileChangeJournal`(`fsync` `journal.jsonl` + torn-write 복구), 단일 writer 락·저널 append 롤백·`dir_sync` 재시도·손상 복구 및 SQLite 전환 ADR(`docs/adr/0001-p1-file-storage-and-sqlite-migration.md`)을 반영했다.
+- **`dok3-parser` (P1-1, `main` 머지됨 [PR #24](https://github.com/LeeYudok/dok3search/pull/24))**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 평탄 타일링 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 반영했다.
+- **`dok3-index` (P1-3, `main` 머지됨 [PR #26](https://github.com/LeeYudok/dok3search/pull/26))**: Tantivy 0.27 기반 `TantivyIndex`(`SearchPort`), `dok3_text` + 2~3 n-gram `dok3_ngram` 토크나이저, 단일 `Mutex<IndexWriter>`, `ReloadPolicy::Manual` 및 `reload()` 발행 잠금 일원화, 히트·카테고리 집계 선 ACL 적용을 반영했다.
+- **`dok3-connectors` (P1-4a, `main` 머지됨 [PR #29](https://github.com/LeeYudok/dok3search/pull/29))**: 로컬 디렉터리 결정적 순회·숨김/심볼릭 링크 차단·크기 상한 skip 처리 및 337건 오프라인 Markdown 샘플 수집·파싱 통합 테스트를 반영했다.
+- **`dok3-server` 로컬 Markdown 색인 (P1-4a 런타임, `main` 머지됨 [PR #43](https://github.com/LeeYudok/dok3search/pull/43), [PR #46](https://github.com/LeeYudok/dok3search/pull/46) 컴파일 오류 수정)**: `DOK3_SOURCE_DIR` 설정 시(IPv4 루프백 `DOK3_BIND`, 기본 `127.0.0.1`) 기동 전 `LocalFileConnector` + `MarkdownParser` + `TantivyIndex::create_in_ram`으로 `tantivy-local` 스냅샷을 구성하며(초기 색인 실패 시 기동 중단), 미설정 시 `in-memory-fake`로 동작한다.
+- **`dok3-index-manager` (P1-4b, `main` 머지됨 [PR #36](https://github.com/LeeYudok/dok3search/pull/36))**: Blue-Green 세대 전환 상태 머신·단일 writer 파일 제어 포인터(`generation_state.json`)·크래시 복구·롤백 저널 catch-up 가드·`ReaderLease` 참조 보호·8종 실패 주입 테스트(11/11)를 반영했다.
+- **`dok3-analyzer` (P2-1, `main` 머지됨 [PR #31](https://github.com/LeeYudok/dok3search/pull/31))**: 외부 크레이트 0개 순수 Rust `camelCase`/`PascalCase`/`snake_case`/`::`/오류코드 분해 및 문자 단위 2~3 n-gram 분석기(6/6)를 반영했다.
+- **`dok3-agent` (P2-5, `main` 머지됨 [PR #34](https://github.com/LeeYudok/dok3search/pull/34))**: MCP JSON-RPC 2.0 stdio + Streamable HTTP(`POST /mcp`) 서버 어댑터(`2025-11-25` `initialize` 및 `2026-07-28` `server/discover`/`Mcp-Method`/`Mcp-Name`/`-32020`/`-32022` 동시 호환), SSOT 7개 `kb_*` 도구, 요청별 `PrincipalResolver` ACL 강제를 반영했다.
+- **`dok3-benchmark` (P2-6, `main` 머지됨 [PR #37](https://github.com/LeeYudok/dok3search/pull/37))**: PoC 검색 품질(Recall@K·MRR@K·ACL 누출 검사) 및 동시 검색 부하(P50/P95/P99·QPS) 측정 하네스·CLI(1 unit + 7 contract)를 반영했다.
+- **다음 런타임 배선 과제**: `dok3-analyzer`·`dok3-index-manager`·`dok3-agent`와 `dok3-storage` 영속 스토어(`FileDocumentStore`·`FileChangeJournal`, 현재 `dok3-server/src/local_index.rs`는 `dok3_storage::content_revision` 헬퍼만 호출)는 실행 경로에 아직 연결되지 않았으며, 후속 통합 PR에서 배선한다.
 
 ```text
 dok3search/
@@ -22,19 +24,19 @@ dok3search/
     Cargo.lock
     rust-toolchain.toml
     crates/
-      dok3-core/             # 오류(Dok3Error), 설정, 공통 타입
+      dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR 등), 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait
-      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2); SQLite 메타·락 보강(#23)
-      dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a), 향후 Git, SVN, DB 소스 확장
+      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2 완료)
+      dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a 완료), 향후 Git, SVN, DB 소스 확장
       dok3-parser/           # MarkdownParser(P1-1 완료), 향후 HTML/PDF/DOCX/Tree-sitter
-      dok3-analyzer/         # 한국어/영어/코드 분석기
-      dok3-index/            # TantivyIndex(SearchPort), schema/tokenizer, 단일 writer, 수동 reader reload(P1-3)
-      dok3-index-manager/    # 세대 빌드/검증/활성화/복구
+      dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram 분석기(P2-1 크레이트 완료)
+      dok3-index/            # TantivyIndex(SearchPort), schema/tokenizer, 단일 writer, 수동 reader reload(P1-3 완료)
+      dok3-index-manager/    # Blue-Green 세대 빌드·검증·활성화·복구 상태 머신(P1-4b 크레이트 완료)
       dok3-search/           # 검색, ACL 필터, 원문 접근 응용 서비스
-      dok3-agent/            # MCP 우선, A2A/ACP 후속
+      dok3-agent/            # MCP JSON-RPC stdio/Streamable HTTP 어댑터(P2-5 크레이트 완료)
       dok3-api/              # Axum 라우터와 검색·문서 조회
-      dok3-benchmark/        # 재현 가능한 부하 생성/측정
-      dok3-server/           # HTTP 서버 진입점
+      dok3-benchmark/        # PoC 검색 품질·동시 부하 하네스(P2-6 완료)
+      dok3-server/           # HTTP 서버 진입점(`tantivy-local` / `in-memory-fake`)
   frontend/                  # React + TypeScript
   config/                    # 예시 YAML
   contracts/                 # YAML 계약 및 버전
@@ -92,10 +94,10 @@ API 응답과 감사 로그는 아래 안정적인 대문자 코드를 사용한
 
 ## 단계별 산출물
 1. Workspace, 오프라인 빌드, 계약 타입, P0-3 인메모리 HTTP 검색·React UI (`main` 머지 완료)
-2. `dok3-storage` + `dok3-parser` + `dok3-index` → P1-4 Markdown 100건 색인·검색·절 조회 end-to-end 연결 (진행 중)
-3. Generation Manager(`dok3-index-manager`): 신규 세대 빌드 → 검증 → 교체 → 복구
-4. 지속 변경 이벤트, ACL, 변경/삭제 동기화
-5. MCP 도구, 코드(Tree-sitter)·한국어 분석기·품질 측정셋
+2. P1 크레이트(`dok3-storage`, `dok3-parser`, `dok3-index`, `dok3-connectors`, `dok3-index-manager`) 및 `DOK3_SOURCE_DIR` 로컬 Markdown `tantivy-local` 색인 경로 (`main` 머지 완료)
+3. P2 크레이트(`dok3-analyzer`, `dok3-agent`, `dok3-benchmark`) 및 CI 필수 체크 도입 (`main` 머지 완료)
+4. 후속 런타임 배선: `dok3-server`/`dok3-api`/`dok3-index`에 영속 `FileDocumentStore`·`dok3-index-manager` 세대 전환·`dok3-agent` `/mcp`·`dok3-analyzer` 연결 (예정)
+5. 지속 변경 이벤트, ACL, 변경/삭제 동기화, 국문 형태소·Tree-sitter 보강
 6. DB 어댑터별 계약 테스트, 50만 건 벤치마크, Windows 서비스 및 폐쇄망 설치 번들
 
 ## 의존성 방향

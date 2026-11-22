@@ -4,10 +4,23 @@ updated: '2026-11-22'
 
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
-  merged_phase: 'P0-3'
-  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/12'
-  local_search_backend: in-memory
+  merged_phase: 'P1-4'
+  merged_phase_status: partial
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/43'
+  local_search_backend: tantivy-local
+  fallback_search_backend: in-memory-fake
+  local_source_env: DOK3_SOURCE_DIR
+  ci_reference: 'https://github.com/LeeYudok/dok3search/pull/48'
   api_input_error_reference: 'https://github.com/LeeYudok/dok3search/pull/14'
+  merged_crates:
+    - 'dok3-storage (P1-2, PR #22·#27)'
+    - 'dok3-parser (P1-1, PR #24)'
+    - 'dok3-index (P1-3, PR #26)'
+    - 'dok3-connectors (P1-4a, PR #29)'
+    - 'dok3-analyzer (P2-1, PR #31)'
+    - 'dok3-agent (P2-5, PR #34)'
+    - 'dok3-index-manager (P1-4b, PR #36)'
+    - 'dok3-benchmark (P2-6, PR #37)'
   bundled_references:
     issue: 'https://github.com/LeeYudok/dok3search/issues/21'
     category: guide
@@ -48,6 +61,7 @@ document_tree:
       - map.md
       - map.yaml
       - README.md
+      - AGENTS.md
   - id: architecture
     title: 아키텍처와 구현 순서
     files:
