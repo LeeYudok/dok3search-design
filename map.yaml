@@ -21,8 +21,8 @@ screens:
   - {id: rust_topic, path: '/search?category=guide&topic=rust', status: bundled_reference, chapters: 666}
   - {id: go_topic, path: '/search?category=guide&topic=go', status: bundled_reference, chapters: 59}
   - {id: sources, path: '/sources', status: planned}
-  - {id: source_admin, path: '/admin/sources', status: planned}
-  - {id: index_jobs, path: '/admin/jobs', status: planned}
+  - {id: source_admin, path: '/admin/sources', status: local_rest}
+  - {id: index_jobs, path: '/admin/jobs', status: local_rest}
   - {id: analyzer_admin, path: '/admin/analyzers', status: planned}
 
 search_taxonomy:

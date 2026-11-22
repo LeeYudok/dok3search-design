@@ -1,5 +1,13 @@
 # 변경 이력
 
+## v1.8 — 2026-11-22
+- `dok3search` `main` `57bf0bd` 기준으로 설계 사본 동기화(#66) 및 P3-1~P3-3 완료 상태 반영:
+  - `v1.7` 설계 사본 37개·`provenance.json`·`AGENTS.md`/`AGENTS.yaml` 동기화 ([PR #66](https://github.com/LeeYudok/dok3search/pull/66))
+  - P3-1 주기 수집 워커 스케줄러·작업 API 완료: `DOK3_REFRESH_INTERVAL_SECS`, `DOK3_ENABLE_ADMIN` IPv4 루프백 가드, `IndexJobPort`, `index_jobs.json`, `GET/POST /api/v1/index/jobs`, `GET /api/v1/index/jobs/{job_id}` ([PR #65](https://github.com/LeeYudok/dok3search/pull/65))
+  - P3-2 규칙 기반 자동 분류·원문 불변 분류 수정 API/UI 완료: 오프라인 `RuleClassifier`, `ClassificationStore`(`classifications.json`, `classification_audit.jsonl`, `pending_index_sync`), `FileDocumentStore::put_immutable`·`update_metadata` 원문 불변 보장, `ClassificationPort`, `GET/PATCH /api/v1/documents/{id}/classification`, `/docs/:id` 분류 편집 UI ([PR #68](https://github.com/LeeYudok/dok3search/pull/68))
+  - P3-3 다중 Source 레지스트리·관리 UI 완료: `SourceRegistry`(`sources.json`, `local-markdown` `managed_by_env: true` 보호, 비심볼릭 실재 디렉터리 검증, 2단계 삭제/롤백, 소스별 `last_error` 격리, 디스크 원본 파일 비삭제), `SourceRegistryPort`, `GET/POST /api/v1/sources`, `DELETE /api/v1/sources/{id}`, `/admin`·`/admin/sources`·`/admin/jobs` 관리 UI ([PR #70](https://github.com/LeeYudok/dok3search/pull/70))
+- `index.yaml`, `index.md`, `map.yaml`, `map.md`, `README.md`, `contracts/index-job.example.yaml`, `dok3search-implementation-roadmap.md`, `RUST_WORKSPACE_AND_CONTRACTS.md` 현행화(영속 모드 전제, `GET` ACL vs `PATCH`/관리자 가드 분리, P3 REST/P4 DB 작업 계약 구분, P2-1 Tree-sitter 잔여 및 후속 마일스톤 `P4~P8` 반영)
+
 ## v1.7 — 2026-11-22
 - `dok3search` `main` `e896c47` 기준으로 P2-2·P2-4·P3-1 핵심 완료 상태 반영:
   - P2-2 한국어 정규화 완료: 오프라인 국문 조사 제거·금융/개발 복합어 정규화, 한국어 골든 40건, 한국어 10쿼리 `Recall@5`/`MRR@5` `0.20 → 1.00`, ACL 위반 0건 ([PR #61](https://github.com/LeeYudok/dok3search/pull/61))

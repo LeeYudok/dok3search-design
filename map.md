@@ -15,15 +15,15 @@
 | 항목 | ID | 경로 | 상태 | 근거 |
 |---|---|---|---|---|
 | 메인 | `home_screen` | `/` | 구현 | [화면 구조](index.md#화면-구조) |
-| 검색 결과 | `search_results` | `/search` | 인메모리 REST 연결 | [화면 구조](index.md#화면-구조) |
-| 문서 상세 | `document_reader` | `/docs/:id` | 인메모리 REST 연결 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
+| 검색 결과 | `search_results` | `/search` | REST 연결(영속/로컬/샘플) | [화면 구조](index.md#화면-구조) |
+| 문서 상세 | `document_reader` | `/docs/:id` | REST 연결·영속 모드(`tantivy-persistent`) 분류 조회(ACL)·편집(`DOK3_ENABLE_ADMIN=true`, `#68`) | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 설계 문서 목록 | `design_catalog` | `/search?category=design` | 형식별 원문 열람 | [화면 구조](index.md#화면-구조) |
 | 개발 가이드 | `guide_topics` | `/search?category=guide` | Rust·Go 세부 주제를 고른다 | [화면 구조](index.md#화면-구조) |
 | Rust 주제 | `rust_topic` | `/search?category=guide&topic=rust` | 정적 자료 로컬 검색·열람, 666장 | [현재 구현](index.md#현재-구현) |
 | Go 주제 | `go_topic` | `/search?category=guide&topic=go` | 정적 자료 로컬 검색·열람, 59편 | [현재 구현](index.md#현재-구현) |
 | 출처 브라우징 | `sources_screen` | `/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
-| 커넥터 관리 | `connector_admin` | `/admin/sources` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
-| 색인 작업 관리 | `jobs_screen` | `/admin/jobs` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
+| 커넥터 관리 | `connector_admin` | `/admin/sources` | 구현(`/admin`·영속 모드+`DOK3_ENABLE_ADMIN=true`·로컬 Source 등록·삭제·재스캔, `#70`) | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
+| 색인 작업 관리 | `jobs_screen` | `/admin/jobs` | 구현(영속 모드+`DOK3_ENABLE_ADMIN=true`·작업 이력·수동 트리거·오류 상세, `#65`·`#70`) | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 | 검색어 분석 실험 | `analyzer_screen` | `/admin/analyzers` | 계획 | [6. 블로그형 React 검색/원문 열람 UI](dok3search-final-architecture.md#6-블로그형-react-검색원문-열람-ui) |
 
 ## 시스템 구성
@@ -43,7 +43,7 @@
 | 검색 스냅샷 | `search_snapshot` | [`contracts/search-snapshot.example.yaml`](contracts/search-snapshot.example.yaml) |
 | 원문 문서 | `document_contract` | [`contracts/document.example.yaml`](contracts/document.example.yaml) |
 | 문서 절 조회 | `section_read` | [`contracts/section-read.example.yaml`](contracts/section-read.example.yaml) |
-| 색인 작업 | `index_job` | [`contracts/index-job.example.yaml`](contracts/index-job.example.yaml) |
+| 색인 작업 | `index_job` | [`contracts/index-job.example.yaml`](contracts/index-job.example.yaml) (P3 REST 계약 + P4 DB 증분 예시) |
 | 색인 세대 전환 | `generation_transition` | [`contracts/generation-transition.example.yaml`](contracts/generation-transition.example.yaml) |
 
 ## 구현과 운영
