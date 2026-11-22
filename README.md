@@ -1,14 +1,14 @@
-# dok3search 최종 설계 패키지 v1.4
+# dok3search 최종 설계 패키지 v1.5
 
 **2026-11-22 현행화 / Markdown + YAML**
 
 금융권 Windows 폐쇄망에서 사람과 AI 에이전트가 교재·매뉴얼·코드·사내 문서를 검색하고 읽는 플랫폼의 설계다. Rust·Tantivy·React를 사용하고, 운영 배포는 HTTPS 8443을 기준으로 설계한다.
 
-설계 개요와 읽는 순서는 [index.md](index.md)에, 문서 트리는 [index.yaml](index.yaml)에 있다. 화면과 구성요소의 연결은 [map.md](map.md)와 [map.yaml](map.yaml)에서 확인한다.
+설계 개요와 읽는 순서는 [index.md](index.md)에, 문서 트리는 [index.yaml](index.yaml)에 있다. 화면과 구성요소의 연결은 [map.md](map.md)와 [map.yaml](map.yaml)에서 확인한다. 협업·SSOT 규칙은 [AGENTS.md](AGENTS.md)에 있다.
 
 ## 현재 구현
 
-[구현 저장소의 P0-3](https://github.com/LeeYudok/dok3search/pull/12)은 Axum 인메모리 검색 API와 React 검색·원문 화면을 연결한다. 로컬 서버 기본 주소는 `127.0.0.1:8080`이다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [설계 인덱스](index.md#현재-구현)에 자료 범위와 검색 경로를 기록한다.
+[구현 저장소](https://github.com/LeeYudok/dok3search) `main`은 Axum REST API와 React 검색·원문 화면을 연결하고(`127.0.0.1:8080`), P1·P2 핵심 크레이트와 `DOK3_SOURCE_DIR` 기반 로컬 Markdown `tantivy-local` 색인 경로(미지정 시 `in-memory-fake`)를 포함한다. 검색 상위 분류는 개발 가이드, 운영 매뉴얼, 코드 레퍼런스, 내부 규정, 설계 문서다. Rust·Go 참고 자료는 개발 가이드 안의 `topic` 필터로 검색한다. [설계 인덱스](index.md#현재-구현)에 최신 머지 범위와 다음 통합 과제를 기록한다.
 
 ## 우선 읽을 문서
 1. `DESIGN_REVIEW_AND_FIXES.md` — 기존 P0/P1 검토

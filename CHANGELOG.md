@@ -1,5 +1,10 @@
 # 변경 이력
 
+## v1.5 — 2026-11-22
+- P1·P2 크레이트(`dok3-storage` PR #22·#27, `dok3-parser` PR #24, `dok3-index` PR #26, `dok3-connectors` PR #29, `dok3-analyzer` PR #31, `dok3-agent` PR #34, `dok3-index-manager` PR #36, `dok3-benchmark` PR #37) 및 `dok3-server` `DOK3_SOURCE_DIR` 기반 로컬 Markdown `tantivy-local` 색인 경로(PR #43·#46), GitHub Actions 필수 체크(`rust-fmt`, `rust-clippy`, `rust-test`, `frontend-build`, PR #48) `main` 머지 상태 반영
+- `index.yaml`(`implementation.merged_phase: 'P1-4'`, `document_tree`에 `AGENTS.md` 등록), `index.md`, `dok3search-implementation-roadmap.md`, `RUST_WORKSPACE_AND_CONTRACTS.md`, `README.md` 통합 현행화
+- 후속: 본 PR 머지 직후 구현 저장소 `frontend/src/samples/design/` 및 `provenance.json` 사본 동기화(`scripts/check-design-copy.py --source ../dok3search-design`) 예정
+
 ## v1.4 — 2026-11-22
 - Rust·Go를 별도 상위 분류에서 개발 가이드 세부 주제로 이동
 - Rust Reference와 Cargo Book을 포함한 공식 참고 자료 범위와 로컬 검색 경로 반영

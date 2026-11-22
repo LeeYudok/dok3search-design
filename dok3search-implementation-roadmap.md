@@ -8,24 +8,24 @@
 
 단계 간 API 변경은 ADR로 기록하고 회귀 테스트를 수행한다. Windows 서비스와 폐쇄망 설치 검증은 P7에서 수행한다.
 
-P0-1~P0-3은 [구현 저장소 main](https://github.com/LeeYudok/dok3search/pull/12)에 반영됐다. 현재 로컬 서버는 인메모리 검색과 React를 연결한다. Rust·Go 참고 자료는 백엔드 색인과 분리된 프런트 정적 자료다. 개발 가이드의 `topic=rust`와 `topic=go`로 고른다. Rust Reference와 Cargo Book을 포함한 자료 범위는 [구현 이슈 #21](https://github.com/LeeYudok/dok3search/issues/21)에 맞췄다. 검색 API와 MCP에 정적 자료를 적재하는 일은 이 현행화 범위에 포함하지 않는다. 파일 수집·Tantivy·MCP는 아래 순서대로 구현한다.
+P0-1~P0-3([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) 이후 P1 크레이트(`dok3-storage` [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[#27](https://github.com/LeeYudok/dok3search/pull/27), `dok3-parser` [#24](https://github.com/LeeYudok/dok3search/pull/24), `dok3-index` [#26](https://github.com/LeeYudok/dok3search/pull/26), `dok3-connectors` [#29](https://github.com/LeeYudok/dok3search/pull/29), `dok3-index-manager` [#36](https://github.com/LeeYudok/dok3search/pull/36)), P2 크레이트(`dok3-analyzer` [#31](https://github.com/LeeYudok/dok3search/pull/31), `dok3-agent` [#34](https://github.com/LeeYudok/dok3search/pull/34), `dok3-benchmark` [#37](https://github.com/LeeYudok/dok3search/pull/37)), `DOK3_SOURCE_DIR` 기반 로컬 Markdown `tantivy-local` 색인 서버 경로([PR #43](https://github.com/LeeYudok/dok3search/pull/43)·[#46](https://github.com/LeeYudok/dok3search/pull/46)), 그리고 PR 필수 체크([PR #48](https://github.com/LeeYudok/dok3search/pull/48))가 [구현 저장소 main](https://github.com/LeeYudok/dok3search)에 반영됐다. Rust·Go 참고 자료([PR #38](https://github.com/LeeYudok/dok3search/pull/38)·[#40](https://github.com/LeeYudok/dok3search/pull/40)·[#42](https://github.com/LeeYudok/dok3search/pull/42))는 개발 가이드의 `topic=rust`와 `topic=go`로 고르며([구현 이슈 #21](https://github.com/LeeYudok/dok3search/issues/21)), 프런트 정적 자료로 분리한다. 다음 통합 슬라이스에서는 `dok3-server`·`dok3-api` 실행 경로에 영속 `FileDocumentStore`·`FileChangeJournal`, `dok3-index-manager` 세대 전환, `dok3-agent` MCP, `dok3-analyzer`를 배선한다.
 
 ## 2. 에픽과 작업 분해
 
 | 순서 | 에픽 | 구체 작업 | 테스트·인수 근거 |
 |---|---|---|---|
-| P0-1 | 뼈대 | `backend/rust/` Cargo 워크스페이스, React·Vite, 설정 디렉터리 | Rust·React 빌드 |
-| P0-2 | Domain | 문서·절·검색·ACL·변경 DTO와 포트 | JSON 직렬화, ACL, 요청 정규화 계약 테스트 |
-| P0-3 | 수직 UI | 인메모리 검색 → `POST /api/v1/search` → React 검색·문서 상세 | HTTP 검색·절 읽기·오류 응답과 React 연결 검증 |
-| P1-1 | Markdown | ParserPort+Markdown 섹션/코드/링크 추출 | `markdown_golden` RED/GREEN |
-| P1-2 | Original Store | 파일 원문+SQLite 메타데이터 매핑 | 원문 해시·revision 테스트 |
-| P1-3 | Tantivy | schema, single writer, upsert/delete, reader reload | in-memory index tests |
-| P1-4 | end-to-end | Markdown 샘플 100건 → 검색/목차/원문 | API+UI E2E, 무외부망 |
-| P2-1 | 코드 | 심볼 분해, 확장자 레지스트리, Tree-sitter Rust/Java | AST fixture/행 번호 |
+| P0-1 | 뼈대 [완료] | `backend/rust/` Cargo 워크스페이스, React·Vite, 설정 디렉터리 ([PR #2](https://github.com/LeeYudok/dok3search/pull/2)) | Rust·React 빌드 (`ci.yml` [PR #48](https://github.com/LeeYudok/dok3search/pull/48)) |
+| P0-2 | Domain [완료] | 문서·절·검색·ACL·변경 DTO와 포트 ([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) | JSON 직렬화, ACL, 요청 정규화 계약 테스트 |
+| P0-3 | 수직 UI [완료] | 인메모리 검색 → `POST /api/v1/search` → React 검색·문서 상세 ([PR #12](https://github.com/LeeYudok/dok3search/pull/12)·[#14](https://github.com/LeeYudok/dok3search/pull/14)) | HTTP 검색·절 읽기·오류 응답과 React 연결 검증 |
+| P1-1 | Markdown [완료] | `ParserPort`+Markdown 섹션/코드/링크 추출 (`dok3-parser` [PR #24](https://github.com/LeeYudok/dok3search/pull/24)) | `markdown_golden` RED/GREEN |
+| P1-2 | Original Store [완료] | 파일 원문+SHA-256/`documents.json`+변경 저널 (`dok3-storage` [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[#27](https://github.com/LeeYudok/dok3search/pull/27)) | 원문 해시·revision·롤백·복구 테스트 |
+| P1-3 | Tantivy [완료] | schema, single writer, upsert/delete, reader reload (`dok3-index` [PR #26](https://github.com/LeeYudok/dok3search/pull/26)) | in-memory index tests |
+| P1-4 | end-to-end [부분 완료] | 커넥터 337건([PR #29](https://github.com/LeeYudok/dok3search/pull/29))·`DOK3_SOURCE_DIR` `tantivy-local`([PR #43](https://github.com/LeeYudok/dok3search/pull/43))·세대 머신([PR #36](https://github.com/LeeYudok/dok3search/pull/36)) `main` 반영; 서버 영속/세대 배선·UI E2E 잔여 | 커넥터 337건·세대 11/11·로컬 스냅샷 테스트 |
+| P2-1 | 코드 [크레이트 완료] | `dok3-analyzer` 식별자·오류코드 분해([PR #31](https://github.com/LeeYudok/dok3search/pull/31)); Tree-sitter Rust/Java 및 서버 배선 잔여 | 분석기 계약 테스트 6/6 (`dok3-analyzer`) |
 | P2-2 | 국문 | 형태소 사전 오프라인 로딩, 원형/조사 검증 | Korean golden |
-| P2-3 | n-gram | 별도 bi-gram·2~4gram 필드 및 랭킹 | Recall/MRR 회귀 |
+| P2-3 | n-gram [토크나이저 완료] | `dok3-index` 2~3gram 토크나이저([PR #26](https://github.com/LeeYudok/dok3search/pull/26))·`dok3-analyzer`([PR #31](https://github.com/LeeYudok/dok3search/pull/31))·`dok3-benchmark`([PR #37](https://github.com/LeeYudok/dok3search/pull/37)) `main` 반영 | Recall/MRR/부하 측정 하네스 (`dok3-benchmark`) |
 | P2-4 | 운영 매뉴얼 | 자체 매뉴얼을 기본 Knowledge Pack으로 자동 색인 | UI/MCP manual self-search |
-| P2-5 | MCP | stdio/Streamable HTTP, 버전 핀, error schema | 실제 Codex/Claude 연결 |
+| P2-5 | MCP [크레이트 완료] | `dok3-agent` stdio/Streamable HTTP, 7개 `kb_*` 도구([PR #34](https://github.com/LeeYudok/dok3search/pull/34)); `dok3-server` 라우팅·실제 Codex/Claude 연결 잔여 | `dok3-agent` 단위·계약 테스트 |
 | P3-1 | 주기 수집 | 파일 워터마크/hash, batch, checkpoint, 재시도 | 중단/재시작 idempotence |
 | P3-2 | 분류 | Summary/tag/keyword/category 규칙 생성+수정 UI | 분류 JSON/원문 불변 |
 | P3-3 | 관리 UI | Source 등록/삭제, 작업 오류/재수집 | UI 권한/상태 E2E |
@@ -60,7 +60,7 @@ GREEN: cargo test -p dok3-parser                # 통과 확인
 
 ```powershell
 cargo fmt --manifest-path backend/rust/Cargo.toml --all -- --check
-cargo clippy --manifest-path backend/rust/Cargo.toml --workspace --all-targets -- -D warnings
+cargo clippy --manifest-path backend/rust/Cargo.toml --workspace --all-targets --locked -- -D warnings
 cargo test --manifest-path backend/rust/Cargo.toml --workspace --locked
 npm --prefix frontend run build
 ```
