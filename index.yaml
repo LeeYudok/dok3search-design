@@ -4,23 +4,32 @@ updated: '2026-11-22'
 
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
-  merged_phase: 'P3-1-core'
+  merged_phase: 'P3-complete'
   merged_phase_status: completed
-  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/60'
-  design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/53'
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/70'
+  design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/66'
   index_schema_version: '2'
   local_search_backend: tantivy-persistent
   ephemeral_local_search_backend: tantivy-local
   fallback_search_backend: in-memory-fake
   local_source_env: DOK3_SOURCE_DIR
   local_data_env: DOK3_DATA_DIR
+  refresh_interval_env: DOK3_REFRESH_INTERVAL_SECS
+  admin_enable_env: DOK3_ENABLE_ADMIN
   mcp_transports:
     - 'POST /mcp'
     - '--mcp-stdio'
+  admin_endpoints:
+    - 'GET/POST /api/v1/index/jobs'
+    - 'GET /api/v1/index/jobs/{job_id}'
+    - 'GET/PATCH /api/v1/documents/{id}/classification'
+    - 'GET/POST /api/v1/sources'
+    - 'DELETE /api/v1/sources/{id}'
   ci_reference: 'https://github.com/LeeYudok/dok3search/pull/48'
   api_input_error_reference: 'https://github.com/LeeYudok/dok3search/pull/14'
   merged_crates:
-    - 'dok3-storage (P1-2, PR #22·#27; P2-wiring PR #54)'
+    - 'dok3-domain (P0-2 PR #12; P3-1/P3-2/P3-3 IndexJobPort·ClassificationPort·SourceRegistryPort PR #65·#68·#70)'
+    - 'dok3-storage (P1-2 PR #22·#27; P2-wiring PR #54; P3-2 원문 불변 put_immutable·update_metadata PR #68)'
     - 'dok3-parser (P1-1, PR #24)'
     - 'dok3-index (P1-3, PR #26; analyzer v2 통합 PR #56)'
     - 'dok3-connectors (P1-4a, PR #29)'
@@ -29,7 +38,8 @@ implementation:
     - 'dok3-index-manager (P1-4b, PR #36; DOK3_DATA_DIR 배선 PR #54)'
     - 'dok3-benchmark (P2-6, PR #37; v2 비교 회귀 PR #56)'
     - 'dok3-search (P2-4 Knowledge Pack 자동 적재·UI/MCP self-search PR #62)'
-    - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55, P3-1 영속 증분 재수집·크래시 복구 PR #60; P2-4 Knowledge Pack 자동 적재 PR #62)'
+    - 'dok3-api (P0-3 PR #12·#14; /mcp 배선 PR #55; P3-1/P3-2/P3-3 관리·분류·소스 API 및 루프백 가드 PR #65·#68·#70)'
+    - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55, P3-1 증분 재수집·워커·작업 API PR #60·#65, P2-4 Knowledge Pack PR #62, P3-2 규칙 분류기·분류 저장소 PR #68, P3-3 다중 소스 레지스트리·부분 재스캔 PR #70)'
   bundled_references:
     issue: 'https://github.com/LeeYudok/dok3search/issues/21'
     category: guide

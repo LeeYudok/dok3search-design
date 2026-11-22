@@ -5,16 +5,18 @@
 
 아래 경로는 [구현 저장소](https://github.com/LeeYudok/dok3search)의 구성이다. P0 구현은 `dok3-core`·`dok3-domain`의 계약 타입과 `dok3-search`·`dok3-api`·`dok3-server`의 인메모리 HTTP 검색을 제공한다([PR #12](https://github.com/LeeYudok/dok3search/pull/12), [PR #14](https://github.com/LeeYudok/dok3search/pull/14)).
 
-### P1·P2·P3 구현·런타임 배선 현황 (`main` `e896c47` 기준, 2026-11-22)
-- **`dok3-storage` (P1-2·영속 배선 완료, [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[PR #27](https://github.com/LeeYudok/dok3search/pull/27)·[PR #54](https://github.com/LeeYudok/dok3search/pull/54))**: `FileDocumentStore`·`FileChangeJournal`·단일 writer 락·손상 복구를 구현했고, `DOK3_DATA_DIR` 설정 시 `dok3-server`에 영속 연결됐다(`document_ids`/`list_documents`/`last_sequence`).
+### P1·P2·P3 구현·런타임 배선 현황 (`main` `57bf0bd` 기준, 2026-11-22)
+- **`dok3-storage` (P1-2·영속 배선·원문 불변 강화 완료, [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[PR #27](https://github.com/LeeYudok/dok3search/pull/27)·[PR #54](https://github.com/LeeYudok/dok3search/pull/54)·[PR #68](https://github.com/LeeYudok/dok3search/pull/68))**: `FileDocumentStore`·`FileChangeJournal`·단일 writer 락·손상 복구를 구현했고, `DOK3_DATA_DIR` 설정 시 `dok3-server`에 영속 연결됐다(`document_ids`/`list_documents`/`last_sequence`). P3-2에서는 `put_immutable`·`update_metadata`로 기존 `objects/<sha256>`·`content_hash`·`revision_id`·`body`·`markdown`·`source_uri` 불변성을 보장한다.
 - **`dok3-parser` (P1-1 완료, [PR #24](https://github.com/LeeYudok/dok3search/pull/24))**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 반영했다.
 - **`dok3-analyzer` + `dok3-index` 통합 (P1-3·P2-1·P2-2 완료, [PR #26](https://github.com/LeeYudok/dok3search/pull/26)·[PR #31](https://github.com/LeeYudok/dok3search/pull/31)·[PR #56](https://github.com/LeeYudok/dok3search/pull/56)·[PR #61](https://github.com/LeeYudok/dok3search/pull/61))**: `dok3_analyzer::analyze_text`를 `TantivyIndex` 스키마 `v2`(`SCHEMA_VERSION = 2`, `dok3_text_v2`·`dok3_ngram_v2`)의 색인·질의 경로에 연결했다(기존 v1 디스크 색인은 새 세대 재색인 필요). [PR #61](https://github.com/LeeYudok/dok3search/pull/61)은 오프라인 국문 조사를 제거하고 금융/개발 복합어를 정규화했으며, 한국어 골든 40건과 한국어 10쿼리 `Recall@5`·`MRR@5` `0.20 → 1.00`, ACL 위반 0건을 확인했다.
 - **`dok3-benchmark` 비교 하네스 (P2-6 완료, [PR #37](https://github.com/LeeYudok/dok3search/pull/37)·[PR #56](https://github.com/LeeYudok/dok3search/pull/56))**: v1 대비 v2 비교 실측에서 `Recall@5` `0.7143 → 1.0000`, `MRR@5` `0.7143 → 1.0000`, ACL 누출 `0건`, 부하 요청 오류 `0/14,000`, 최대 질의 p95 `0.3054 ms → 0.3191 ms`를 확인했다.
 - **`dok3-connectors` + `dok3-index-manager` + `dok3-server` (P1-4a/b·영속 세대 완료, [PR #29](https://github.com/LeeYudok/dok3search/pull/29)·[PR #36](https://github.com/LeeYudok/dok3search/pull/36)·[PR #43](https://github.com/LeeYudok/dok3search/pull/43)·[PR #54](https://github.com/LeeYudok/dok3search/pull/54))**: `DOK3_SOURCE_DIR`+`DOK3_DATA_DIR` 지정 시 `tantivy-persistent`(콜드 색인·웜 재사용·증분 세대 교체 및 퇴역 GC), `DOK3_SOURCE_DIR`만 지정 시 `tantivy-local`, 미지정 시 `in-memory-fake`로 동작한다(`DOK3_BIND` 기본 `127.0.0.1`, 비루프백 거부).
 - **`dok3-agent` + `dok3-api` MCP 런타임 배선 (P2-5 완료, [PR #34](https://github.com/LeeYudok/dok3search/pull/34)·[PR #55](https://github.com/LeeYudok/dok3search/pull/55))**: `build_router_with_extra`로 `POST /mcp` Streamable HTTP를 SPA fallback 이전·보안 헤더 안쪽에 병합하고, `--mcp-stdio` 플래그와 `stderr` 진단 분리(`print_build_report` `eprintln!`)를 적용했다(`Principal::anonymous_public()` 고정, fail-closed).
 - **`dok3-search` + `dok3-server` 자체 운영 매뉴얼 (P2-4 완료, [PR #62](https://github.com/LeeYudok/dok3search/pull/62))**: `docs/manual/dok3search-manual.md`(15개 H2 절)를 Knowledge Pack(`dok3search-manual`, `category: manual`)으로 자동 적재하고 `frontend/src/documents.ts`와 `vite.config.ts` `server.fs.allow`를 보완했다. UI·MCP `kb_search`/`kb_get_document`/`kb_get_section` self-search를 검증했다.
-- **`dok3-server` 영속 런타임 증분 재수집 (P3-1 핵심 완료, [PR #60](https://github.com/LeeYudok/dok3search/pull/60))**: `PersistentRuntime::refresh()`·`RefreshReport`·`ReaderLease` 보호·비호환 세대 격리(`quarantine_incompatible_generations`)·저널 정합화(`reconcile_store_journal`)를 추가하고 크래시 복구 통합 테스트 3종을 통과했다.
-- **다음 구현 과제 (`P3-1` 워커 · `P3-2` 분류 · `P3-3` 관리 UI)**: 주기 수집 워커 스케줄러·작업 API, Summary/tag/keyword/category 규칙 생성·수정 UI, Source 등록/삭제·작업 오류/재수집 관리 UI를 구현한다.
+- **`dok3-server` 영속 런타임·주기 수집·작업 API (P3-1 완료, [PR #60](https://github.com/LeeYudok/dok3search/pull/60)·[PR #65](https://github.com/LeeYudok/dok3search/pull/65))**: `PersistentRuntime::refresh()`·`RefreshReport`·`ReaderLease` 보호·비호환 세대 격리(`quarantine_incompatible_generations`)·저널 정합화(`reconcile_store_journal`)에 더해 `DOK3_REFRESH_INTERVAL_SECS` 주기 수집 워커 스케줄러, `index_jobs.json`, `GET/POST /api/v1/index/jobs`, `GET /api/v1/index/jobs/{job_id}`, `DOK3_ENABLE_ADMIN` IPv4 루프백 가드를 구현했다.
+- **규칙 기반 자동 분류·원문 불변 편집 (`P3-2` 완료, [PR #68](https://github.com/LeeYudok/dok3search/pull/68))**: `dok3-server` 오프라인 `RuleClassifier`와 분리 저장소 `ClassificationStore`(`classifications.json`·`classification_audit.jsonl`, `pending_index_sync`), `GET/PATCH /api/v1/documents/{id}/classification` (`require_admin_for_mutations_middleware`), `/docs/:id` 분류 편집·초기화 UI를 구현했다.
+- **다중 Source 레지스트리·관리 UI (`P3-3` 완료, [PR #70](https://github.com/LeeYudok/dok3search/pull/70))**: `SourceRegistry`(`sources.json`, `local-markdown` `managed_by_env: true` 보호, 비심볼릭 디렉터리 검증, 2단계 삭제/롤백, 소스별 `last_error` 격리, 디스크 원본 비삭제), `GET/POST /api/v1/sources`, `DELETE /api/v1/sources/{id}` (`require_admin_middleware`), `/admin`·`/admin/sources`·`/admin/jobs` 관리 UI 및 `AGENTS.md`/`AGENTS.yaml` 현행화를 완료했다.
+- **다음 구현 과제 (`P4` DB 어댑터 · `P2-1` Tree-sitter · `P5~P8`)**: SQLite·MySQL/MariaDB·PostgreSQL 증분 커넥터 및 계약 테스트, Tree-sitter Rust/Java 보강, 50만 건 부하·Windows 서비스·폐쇄망 설치 번들을 순차 진행한다.
 
 ```text
 dok3search/
@@ -23,19 +25,19 @@ dok3search/
     Cargo.lock
     rust-toolchain.toml
     crates/
-      dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR 등), 공통 타입
-      dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait
-      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2·영속 배선 완료)
+      dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN 등), 공통 타입
+      dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait(검색·저장·작업·분류·소스)
+      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2·영속 배선·원문 불변 강화 완료)
       dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a 완료), 향후 Git, SVN, DB 소스 확장
       dok3-parser/           # MarkdownParser(P1-1 완료), 향후 HTML/PDF/DOCX/Tree-sitter
-      dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram 분석기(v2 통합 완료, 국문 정규화 착수)
+      dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·국문 조사/복합어 분석기(v2 통합·P2-2 완료)
       dok3-index/            # TantivyIndex(SearchPort), schema v2(dok3-analyzer 통합), 수동 reader reload
       dok3-index-manager/    # Blue-Green 세대 빌드·검증·활성화·복구 상태 머신(DOK3_DATA_DIR 배선 완료)
       dok3-search/           # 검색, ACL 필터, 원문 접근 응용 서비스
       dok3-agent/            # MCP JSON-RPC stdio/Streamable HTTP 어댑터(P2-5 배선 완료)
-      dok3-api/              # Axum 라우터(`build_router_with_extra`)·검색·문서 조회
+      dok3-api/              # Axum 라우터(`build_router_with_extra`)·검색·문서 조회·작업/분류/소스 API·관리자 가드
       dok3-benchmark/        # PoC 검색 품질(v1 vs v2)·동시 부하 하네스(P2-6 완료)
-      dok3-server/           # HTTP(`tantivy-persistent`/`tantivy-local`/`in-memory-fake`)·`/mcp`·`--mcp-stdio` 진입점
+      dok3-server/           # HTTP(`tantivy-persistent`/`tantivy-local`/`in-memory-fake`)·워커·분류·소스 레지스트리·`/mcp`·`--mcp-stdio` 진입점
   frontend/                  # React + TypeScript
   config/                    # 예시 YAML
   contracts/                 # YAML 계약 및 버전
@@ -65,6 +67,32 @@ pub trait DocumentParserPort: Send + Sync {
 pub trait ChangeJournalPort: Send + Sync {
     fn append(&self, change: ChangeEvent) -> Result<Sequence, Dok3Error>;
     fn read_after(&self, seq: Sequence, limit: usize) -> Result<Vec<ChangeEvent>, Dok3Error>;
+}
+
+pub trait IndexJobPort: Send + Sync {
+    fn list_jobs(&self) -> Result<IndexJobListResponse, Dok3Error>;
+    fn get_job(&self, job_id: &str) -> Result<IndexJobRecord, Dok3Error>;
+    fn trigger_job(&self, req: &TriggerIndexJobRequest) -> Result<IndexJobRecord, Dok3Error>;
+}
+
+pub trait ClassificationPort: Send + Sync {
+    fn get_classification(
+        &self,
+        principal: &Principal,
+        id: &DocumentId,
+    ) -> Result<DocumentClassification, Dok3Error>;
+    fn update_classification(
+        &self,
+        principal: &Principal,
+        id: &DocumentId,
+        req: &UpdateClassificationRequest,
+    ) -> Result<DocumentClassification, Dok3Error>;
+}
+
+pub trait SourceRegistryPort: Send + Sync {
+    fn list_sources(&self) -> Result<SourceListResponse, Dok3Error>;
+    fn register_source(&self, req: &CreateSourceRequest) -> Result<RegisteredSource, Dok3Error>;
+    fn delete_source(&self, source_id: &str) -> Result<DeleteSourceResponse, Dok3Error>;
 }
 ```
 
@@ -96,7 +124,7 @@ API 응답과 감사 로그는 아래 안정적인 대문자 코드를 사용한
 2. P1 크레이트(`dok3-storage`, `dok3-parser`, `dok3-index`, `dok3-connectors`, `dok3-index-manager`) 및 `DOK3_SOURCE_DIR` 로컬 Markdown `tantivy-local` 색인 경로 (`main` 머지 완료)
 3. P2 크레이트(`dok3-analyzer`, `dok3-agent`, `dok3-benchmark`) 및 CI 필수 체크 도입 (`main` 머지 완료)
 4. P2 런타임 배선: `dok3-index`+`dok3-analyzer` `SCHEMA_VERSION = 2` 통합([PR #56](https://github.com/LeeYudok/dok3search/pull/56)), `DOK3_DATA_DIR` 영속 세대 전환([PR #54](https://github.com/LeeYudok/dok3search/pull/54)), `POST /mcp`·`--mcp-stdio`([PR #55](https://github.com/LeeYudok/dok3search/pull/55)) (`main` 머지 완료)
-5. 국문 조사/복합어 정규화(P2-2), 자체 운영 매뉴얼 자동 색인(P2-4), 영속 증분 재수집(P3-1)·Tree-sitter 보강 (진행 중)
+5. 국문 조사/복합어 정규화(P2-2), 자체 운영 매뉴얼 자동 색인(P2-4), 주기 수집·분류·관리 UI(P3-1~P3-3) `main` 머지 완료; Tree-sitter 보강(P2-1) 잔여
 6. DB 어댑터별 계약 테스트, 50만 건 벤치마크, Windows 서비스 및 폐쇄망 설치 번들
 
 ## 의존성 방향
