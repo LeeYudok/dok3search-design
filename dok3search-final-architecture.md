@@ -21,7 +21,7 @@ dok3search는 금융권 폐쇄망에서 개발 문서·기술 교재·매뉴얼�
 - Markdown, HTML, 텍스트 및 주요 코드 언어를 파싱한다. PDF, DOCX, JSP 등은 단계적으로 추가한다.
 - 블로그형 React 검색 UI, 문서 원문 뷰어, 목차·코드 하이라이트·요약·태그·키워드·카테고리를 제공한다.
 - 파일·Git/SVN·SQLite·MariaDB·MySQL·PostgreSQL·Oracle 소스를 모듈화된 Connector로 색인한다.
-- REST + MCP를 먼저 제공하고, A2A·ACP는 독립 어댑터로 확장한다.
+- REST + MCP를 먼저 제공하고, A2A·ACP는 독립 어댑터로 확장한다. Google AX(Agent Executor)는 동일 프로토콜 계층에 섞지 않고 실행 인프라 계층으로 분리해 `Workspace` MCP 소비자와 P8 장기 에이전트 작업 실행 백엔드로 연동한다.
 - 승인 워크플로 없이 자동 수집/갱신한다. 기존 시스템 권한·접근 제어·비밀정보 보호는 유지한다.
 - 독립 모듈별 **단위 테스트 우선**, 인터페이스 계약 테스트 및 단계별 통합 테스트로 빅뱅 개발을 방지한다.
 
