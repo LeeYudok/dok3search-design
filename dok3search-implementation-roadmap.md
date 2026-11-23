@@ -21,7 +21,7 @@ P0-1~P0-3([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) 이후 P1·P
 | P1-2 | Original Store [완료] | 파일 원문+SHA-256/`documents.json`+변경 저널 (`dok3-storage` [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[#27](https://github.com/LeeYudok/dok3search/pull/27)) | 원문 해시·revision·롤백·복구 테스트 |
 | P1-3 | Tantivy [완료] | schema, single writer, upsert/delete, reader reload (`dok3-index` [PR #26](https://github.com/LeeYudok/dok3search/pull/26)) | in-memory index tests |
 | P1-4 | end-to-end [완료] | 커넥터 337건([PR #29](https://github.com/LeeYudok/dok3search/pull/29))·`DOK3_SOURCE_DIR` `tantivy-local`([PR #43](https://github.com/LeeYudok/dok3search/pull/43))·`DOK3_DATA_DIR` `tantivy-persistent`·세대 전환([PR #36](https://github.com/LeeYudok/dok3search/pull/36)·[#54](https://github.com/LeeYudok/dok3search/pull/54)) 완료 | 커넥터 337건·세대 11/11·콜드/웜/증분 영속 E2E |
-| P2-1 | 코드 [식별자 통합 완료] | `dok3-analyzer`([PR #31](https://github.com/LeeYudok/dok3search/pull/31))·`dok3-index` v2 스키마·질의 통합([PR #56](https://github.com/LeeYudok/dok3search/pull/56)); Tree-sitter Rust/Java 잔여 | 분석기 6/6·식별자/오류코드 통합·Recall/MRR 1.0000 |
+| P2-1 | 코드 [완료] | `dok3-analyzer`([PR #31](https://github.com/LeeYudok/dok3search/pull/31))·`dok3-index` v2 통합([PR #56](https://github.com/LeeYudok/dok3search/pull/56))·`dok3-parser` `CodeSymbolParser`(Rust/Java/Go/SQL/JSP) & `ParserRegistry`([PR #108](https://github.com/LeeYudok/dok3search/pull/108)) | 분석기 6/6·심볼/행범위/레지스트리 테스트·Recall/MRR 1.0000 |
 | P2-2 | 국문 [완료] | 오프라인 국문 조사 제거·복합어 정규화([PR #61](https://github.com/LeeYudok/dok3search/pull/61)) 및 순수 Rust `mecab-ko-dic` 형태소 코어(`dok3-analyzer::kodic`, `builtin`/`lindera`/`nori-mixed`/`nori-discard`, [PR #100](https://github.com/LeeYudok/dok3search/pull/100)) | Korean golden 40건·4종 프로파일·`Recall@5`/`MRR@5` `0.20 → 1.00`·ACL 위반 0건 |
 | P2-3 | n-gram [완료] | `dok3-index` v2(`dok3_text_v2`/`dok3_ngram_v2`) + `dok3-analyzer`([PR #56](https://github.com/LeeYudok/dok3search/pull/56))·`dok3-benchmark`([PR #37](https://github.com/LeeYudok/dok3search/pull/37)) | Recall@5/MRR@5 `0.7143 → 1.0000`, 0/14,000 오류 |
 | P2-4 | 운영 매뉴얼 [완료] | `docs/manual/dok3search-manual.md`을 기본 Knowledge Pack(`dok3search-manual`)으로 자동 색인 ([이슈 #58](https://github.com/LeeYudok/dok3search/issues/58)·[PR #62](https://github.com/LeeYudok/dok3search/pull/62)) | UI/MCP manual self-search |
@@ -29,15 +29,15 @@ P0-1~P0-3([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) 이후 P1·P
 | P3-1 | 주기 수집 [완료] | `PersistentRuntime::refresh()`·`ReaderLease` 보호·비호환 세대 격리·저널 정합화 ([이슈 #59](https://github.com/LeeYudok/dok3search/issues/59)·[PR #60](https://github.com/LeeYudok/dok3search/pull/60)); `DOK3_REFRESH_INTERVAL_SECS` 워커·`index_jobs.json`·`/api/v1/index/jobs*`·`DOK3_ENABLE_ADMIN` 가드 ([이슈 #63](https://github.com/LeeYudok/dok3search/issues/63)·[PR #65](https://github.com/LeeYudok/dok3search/pull/65)) | 중단/재시작 idempotence·리더 보호·크래시 복구·작업 상태·루프백 가드 |
 | P3-2 | 분류 [완료] | 오프라인 `RuleClassifier`·`classifications.json`/`classification_audit.jsonl`·`GET/PATCH /api/v1/documents/{id}/classification`·`/docs/:id` 분류 편집 UI ([이슈 #67](https://github.com/LeeYudok/dok3search/issues/67)·[PR #68](https://github.com/LeeYudok/dok3search/pull/68)) | 분류 JSON/원문(`objects/<sha256>`·본문·`revision_id`) 불변·재색인 반영 |
 | P3-3 | 관리 UI [완료] | 다중 Source 레지스트리(`sources.json`)·`GET/POST /api/v1/sources`·`DELETE /api/v1/sources/{id}`·`/admin`(`/admin/sources`, `/admin/jobs`) 관리 UI ([이슈 #69](https://github.com/LeeYudok/dok3search/issues/69)·[PR #70](https://github.com/LeeYudok/dok3search/pull/70)) | `local-markdown` 보호·경로 검증·2단계 삭제/롤백·오류 격리·권한 가드 |
-| P4-1 | SQLite | SeaORM SourceAdapter, 커서/삭제 조정 | DDL fixture update/delete |
-| P4-2 | MySQL/MariaDB | 연결풀/조인 제한/커서/복구 | 두 DB 별도 계약 테스트 |
-| P4-3 | PostgreSQL | cursor, isolation, tombstone | DB contract suite |
-| P5-1 | Oracle | Oracle client + adapter + 바인딩된 SELECT | Oracle 통합망에서 테스트 |
-| P5-2 | 문서 | HTML/PDF/DOCX/SQL/JSP 보강 | 손실 경고+파서 fixture |
+| P4-1 | SQLite [완료] | `SqliteSourceAdapter` 커서 증분 수집·`sql_guard` SQL-aware SELECT/CTE 검증·`batch_limit`/`has_more` hardening ([PR #110](https://github.com/LeeYudok/dok3search/pull/110)) | DDL fixture, CTE/리터럴 세미콜론, 페이지네이션 회귀 테스트 |
+| P4-2 | MySQL/MariaDB [완료] | `RelationalSourceAdapter` + `DbDialect::MySql`/`MariaDb` + `TombstoneStrategy` ([PR #110](https://github.com/LeeYudok/dok3search/pull/110)) | 방언별 바인딩·커서·tombstone 계약 테스트 |
+| P4-3 | PostgreSQL [완료] | `RelationalSourceAdapter` + `DbDialect::PostgreSql` (`$1/$2`) + `TombstoneStrategy` ([PR #110](https://github.com/LeeYudok/dok3search/pull/110)) | 방언별 바인딩·커서·tombstone 계약 테스트 |
+| P5-1 | Oracle [완료] | `RelationalSourceAdapter` + `DbDialect::Oracle` (`:cursor/:limit`, `FETCH FIRST`) ([PR #110](https://github.com/LeeYudok/dok3search/pull/110)) | Oracle 방언 바인딩·읽기 전용 SELECT 계약 테스트 |
+| P5-2 | 문서 [완료] | `HtmlParser`·`CodeSymbolParser`(SQL/JSP 경고)·`PlainTextParser`·`ParserRegistry` ([PR #108](https://github.com/LeeYudok/dok3search/pull/108)) | HTML 골든 17종 + 코드/JSP/레지스트리 테스트 |
 | P6-1 | REST [완료] | cursor pagination(`next_cursor`), ACL, 루프백 `/metrics` Prometheus 출력 ([PR #80](https://github.com/LeeYudok/dok3search/pull/80)) | 액세스 차단·커서·메트릭 테스트 |
-| P7-1 | Windows | Service, event log, health, stop/restart, recovery | 재부팅 시 smoke test |
-| P7-2 | 폐쇄망 [1차 완료] | `scripts/offline-bundle.sh` vendor/npm 캐시 번들·SHA-256 매니페스트 ([PR #83](https://github.com/LeeYudok/dok3search/pull/83)); Windows 클린 설치 잔여 | 네트워크 0건+frozen build |
-| P8 | 확장 | 분류 agent, A2A/ACP bridge, Google AX (`Workspace` MCP 연동 + 장기 `Task` 실행 백엔드) | 프로토콜·런타임 계약 테스트 |
+| P7-1 | Windows [완료] | `deploy/windows/` Service 등록·제거·자동 복구·smoke 스크립트 ([PR #112](https://github.com/LeeYudok/dok3search/pull/112)) | Windows Service 등록/재시작 복구 절차 |
+| P7-2 | 폐쇄망 [완료] | `scripts/offline-bundle.sh` vendor/npm 캐시·`--dict ko-dic.bin` 번들·Windows 체크리스트 ([PR #83](https://github.com/LeeYudok/dok3search/pull/83)·[#112](https://github.com/LeeYudok/dok3search/pull/112)) | 네트워크 0건+frozen build |
+| P8 | 확장 [완료] | A2A(`/.well-known/agent.json`, `/a2a`)·`AcpAdapter`·`/llms.txt`·Google AX `Workspace` 매니페스트 ([PR #114](https://github.com/LeeYudok/dok3search/pull/114)) | A2A/ACP/ACL 계약 테스트 |
 
 ## 3. 구현 작업 템플릿
 

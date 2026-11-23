@@ -1,5 +1,12 @@
 # 변경 이력
 
+## v2.0 — 2026-11-24
+- **P0~P8 전체 로드맵 100% 완료 반영 (`dok3search` `main` `b298c60`)**:
+  - P2-1 / P5-2: `CodeSymbolParser`(Rust/Java/Go/SQL/JSP)·`PlainTextParser`·`ParserRegistry` ([PR #108](https://github.com/LeeYudok/dok3search/pull/108))
+  - P4 / P5-1: `sql_guard` SQL-aware SELECT/CTE 검증, SQLite `batch_limit`/`has_more` hardening, MySQL/MariaDB·PostgreSQL·Oracle 공통 `RelationalSourceAdapter` ([PR #110](https://github.com/LeeYudok/dok3search/pull/110))
+  - P7-1 / P7-2: `deploy/windows/` Windows Service 등록·복구·smoke 스크립트 및 `scripts/offline-bundle.sh` `--dict ko-dic.bin` 번들 완성 ([PR #83](https://github.com/LeeYudok/dok3search/pull/83)·[#112](https://github.com/LeeYudok/dok3search/pull/112))
+  - P8: A2A(`/.well-known/agent.json`, `/a2a`), `AcpAdapter`, `/llms.txt`, `config/ax-workspace.example.yaml` ([PR #114](https://github.com/LeeYudok/dok3search/pull/114))
+
 ## v1.10 — 2026-11-24
 - **P8 Google AX(Agent Executor) 연동 계층 반영 및 로드맵 현행화**:
   - `dok3search-final-architecture.md`: MCP(도구·지식), A2A/ACP(에이전트 협업), Google AX(`Workspace` MCP 소비자 및 P8 장기 작업 실행 인프라) 계층 분리 명시
