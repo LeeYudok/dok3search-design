@@ -1,5 +1,10 @@
 # 변경 이력
 
+## v1.9 — 2026-11-23
+- `doksam-korean` → `dok3-analyzer` 통합 및 분석기 프로파일 전환 설계 반영:
+  - 순수 Rust `mecab-ko-dic` Viterbi lattice 코어(`dok3-analyzer::kodic`)를 `dok3-analyzer`에 통합하고, `DOK3_ANALYZER_PROFILE`(`builtin`/`lindera`/`nori-mixed`/`nori-discard`), `DOK3_DICT_PATH`, `DOK3_USER_DICT_PATH` 환경변수와 프로파일/사전 변경 시 영속 세대 자동 재구축 계약 추가
+  - `ai-coder` 등 외부 에이전트가 REST/MCP(`dok3-agent`)로 `dok3search` 단일 플랫폼(문서+코드 검색 SSOT)을 사용하는 구조 명시
+
 ## v1.8 — 2026-11-22
 - `dok3search` `main` `57bf0bd` 기준으로 설계 사본 동기화(#66) 및 P3-1~P3-3 완료 상태 반영:
   - `v1.7` 설계 사본 37개·`provenance.json`·`AGENTS.md`/`AGENTS.yaml` 동기화 ([PR #66](https://github.com/LeeYudok/dok3search/pull/66))

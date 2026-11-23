@@ -25,12 +25,12 @@ dok3search/
     Cargo.lock
     rust-toolchain.toml
     crates/
-      dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN 등), 공통 타입
+      dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN·DOK3_ANALYZER_PROFILE·DOK3_DICT_PATH·DOK3_USER_DICT_PATH 등), 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait(검색·저장·작업·분류·소스)
       dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2·영속 배선·원문 불변 강화 완료)
       dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a 완료), 향후 Git, SVN, DB 소스 확장
       dok3-parser/           # MarkdownParser(P1-1 완료), 향후 HTML/PDF/DOCX/Tree-sitter
-      dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·국문 조사/복합어 분석기(P2-1 식별자 통합·P2-2 완료; Tree-sitter 잔여)
+      dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·순수 Rust mecab-ko-dic 형태소 분석기(`kodic`, 프로파일: `builtin`/`lindera`/`nori-mixed`/`nori-discard`) 및 사용자 사전 지원
       dok3-index/            # TantivyIndex(SearchPort), schema v2(dok3-analyzer 통합), 수동 reader reload
       dok3-index-manager/    # Blue-Green 세대 빌드·검증·활성화·복구 상태 머신(DOK3_DATA_DIR 배선 완료)
       dok3-search/           # 검색, ACL 필터, 원문 접근 응용 서비스
