@@ -28,13 +28,13 @@ dok3search/
       dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN·DOK3_ANALYZER_PROFILE·DOK3_DICT_PATH·DOK3_USER_DICT_PATH 등), 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait(검색·저장·작업·분류·소스)
       dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2·영속 배선·원문 불변 강화 완료)
-      dok3-connectors/       # 로컬 파일 Markdown 커넥터(P1-4a 완료), 향후 Git, SVN, DB 소스 확장
-      dok3-parser/           # MarkdownParser(P1-1 완료), 향후 HTML/PDF/DOCX/Tree-sitter
+      dok3-connectors/       # 로컬 파일, SQLite(`sql_guard`+`batch_limit`), MySQL/MariaDB·PostgreSQL·Oracle 공통 관계형 어댑터(P4/P5-1 완료)
+      dok3-parser/           # Markdown, HTML, CodeSymbolParser(Rust/Java/Go/SQL/JSP), PlainTextParser, ParserRegistry(P2-1/P5-2 완료)
       dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·순수 Rust mecab-ko-dic 형태소 분석기(`kodic`, 프로파일: `builtin`/`lindera`/`nori-mixed`/`nori-discard`) 및 사용자 사전 지원
       dok3-index/            # TantivyIndex(SearchPort), schema v2(dok3-analyzer 통합), 수동 reader reload
       dok3-index-manager/    # Blue-Green 세대 빌드·검증·활성화·복구 상태 머신(DOK3_DATA_DIR 배선 완료)
       dok3-search/           # 검색, ACL 필터, 원문 접근 응용 서비스
-      dok3-agent/            # MCP JSON-RPC stdio/Streamable HTTP 어댑터(P2-5 배선 완료)
+      dok3-agent/            # MCP JSON-RPC stdio/HTTP, A2A(`/.well-known/agent.json`, `/a2a`), ACP, `/llms.txt` 어댑터(P8 완료)
       dok3-api/              # Axum 라우터(`build_router_with_extra`)·검색·문서 조회·작업/분류/소스 API·관리자 가드
       dok3-benchmark/        # PoC 검색 품질(v1 vs v2)·동시 부하 하네스(P2-6 완료)
       dok3-server/           # HTTP(`tantivy-persistent`/`tantivy-local`/`in-memory-fake`)·워커·분류·소스 레지스트리·`/mcp`·`--mcp-stdio` 진입점
