@@ -22,7 +22,7 @@ P0-1~P0-3([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) 이후 P1·P
 | P1-3 | Tantivy [완료] | schema, single writer, upsert/delete, reader reload (`dok3-index` [PR #26](https://github.com/LeeYudok/dok3search/pull/26)) | in-memory index tests |
 | P1-4 | end-to-end [완료] | 커넥터 337건([PR #29](https://github.com/LeeYudok/dok3search/pull/29))·`DOK3_SOURCE_DIR` `tantivy-local`([PR #43](https://github.com/LeeYudok/dok3search/pull/43))·`DOK3_DATA_DIR` `tantivy-persistent`·세대 전환([PR #36](https://github.com/LeeYudok/dok3search/pull/36)·[#54](https://github.com/LeeYudok/dok3search/pull/54)) 완료 | 커넥터 337건·세대 11/11·콜드/웜/증분 영속 E2E |
 | P2-1 | 코드 [식별자 통합 완료] | `dok3-analyzer`([PR #31](https://github.com/LeeYudok/dok3search/pull/31))·`dok3-index` v2 스키마·질의 통합([PR #56](https://github.com/LeeYudok/dok3search/pull/56)); Tree-sitter Rust/Java 잔여 | 분석기 6/6·식별자/오류코드 통합·Recall/MRR 1.0000 |
-| P2-2 | 국문 [완료] | 오프라인 국문 조사 제거·복합어 정규화 (`dok3-analyzer`, [이슈 #57](https://github.com/LeeYudok/dok3search/issues/57)·[PR #61](https://github.com/LeeYudok/dok3search/pull/61)) | Korean golden 40건·한국어 10쿼리 `Recall@5`/`MRR@5` `0.20 → 1.00`·ACL 위반 0건 |
+| P2-2 | 국문 [완료] | 오프라인 국문 조사 제거·복합어 정규화([PR #61](https://github.com/LeeYudok/dok3search/pull/61)) 및 순수 Rust `mecab-ko-dic` 형태소 코어(`dok3-analyzer::kodic`, `builtin`/`lindera`/`nori-mixed`/`nori-discard`, [PR #100](https://github.com/LeeYudok/dok3search/pull/100)) | Korean golden 40건·4종 프로파일·`Recall@5`/`MRR@5` `0.20 → 1.00`·ACL 위반 0건 |
 | P2-3 | n-gram [완료] | `dok3-index` v2(`dok3_text_v2`/`dok3_ngram_v2`) + `dok3-analyzer`([PR #56](https://github.com/LeeYudok/dok3search/pull/56))·`dok3-benchmark`([PR #37](https://github.com/LeeYudok/dok3search/pull/37)) | Recall@5/MRR@5 `0.7143 → 1.0000`, 0/14,000 오류 |
 | P2-4 | 운영 매뉴얼 [완료] | `docs/manual/dok3search-manual.md`을 기본 Knowledge Pack(`dok3search-manual`)으로 자동 색인 ([이슈 #58](https://github.com/LeeYudok/dok3search/issues/58)·[PR #62](https://github.com/LeeYudok/dok3search/pull/62)) | UI/MCP manual self-search |
 | P2-5 | MCP [런타임 배선 완료] | `dok3-agent`([PR #34](https://github.com/LeeYudok/dok3search/pull/34)) + `dok3-api` `build_router_with_extra` + `dok3-server` `/mcp`·`--mcp-stdio`([PR #55](https://github.com/LeeYudok/dok3search/pull/55)) | HTTP `/mcp`·stdio fail-closed 통합 테스트 6종 |
@@ -34,10 +34,10 @@ P0-1~P0-3([PR #12](https://github.com/LeeYudok/dok3search/pull/12)) 이후 P1·P
 | P4-3 | PostgreSQL | cursor, isolation, tombstone | DB contract suite |
 | P5-1 | Oracle | Oracle client + adapter + 바인딩된 SELECT | Oracle 통합망에서 테스트 |
 | P5-2 | 문서 | HTML/PDF/DOCX/SQL/JSP 보강 | 손실 경고+파서 fixture |
-| P6-1 | REST | pagination/ACL/log/metrics | 액세스 차단·로드 테스트 |
+| P6-1 | REST [완료] | cursor pagination(`next_cursor`), ACL, 루프백 `/metrics` Prometheus 출력 ([PR #80](https://github.com/LeeYudok/dok3search/pull/80)) | 액세스 차단·커서·메트릭 테스트 |
 | P7-1 | Windows | Service, event log, health, stop/restart, recovery | 재부팅 시 smoke test |
-| P7-2 | 폐쇄망 | vendor/npm 캐시/매뉴얼/설치 번들 | 네트워크 0건+frozen build |
-| P8 | 확장 | 분류 agent, A2A/ACP bridge | 프로토콜 계약 테스트 |
+| P7-2 | 폐쇄망 [1차 완료] | `scripts/offline-bundle.sh` vendor/npm 캐시 번들·SHA-256 매니페스트 ([PR #83](https://github.com/LeeYudok/dok3search/pull/83)); Windows 클린 설치 잔여 | 네트워크 0건+frozen build |
+| P8 | 확장 | 분류 agent, A2A/ACP bridge, Google AX (`Workspace` MCP 연동 + 장기 `Task` 실행 백엔드) | 프로토콜·런타임 계약 테스트 |
 
 ## 3. 구현 작업 템플릿
 

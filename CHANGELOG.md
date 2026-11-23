@@ -1,5 +1,10 @@
 # 변경 이력
 
+## v1.10 — 2026-11-24
+- **P8 Google AX(Agent Executor) 연동 계층 반영 및 로드맵 현행화**:
+  - `dok3search-final-architecture.md`: MCP(도구·지식), A2A/ACP(에이전트 협업), Google AX(`Workspace` MCP 소비자 및 P8 장기 작업 실행 인프라) 계층 분리 명시
+  - `dok3search-implementation-roadmap.md`: P8에 Google AX 연동 반영 및 `dok3-analyzer::kodic`([PR #100](https://github.com/LeeYudok/dok3search/pull/100))·P6-1([PR #80](https://github.com/LeeYudok/dok3search/pull/80))·P7-2 1차([PR #83](https://github.com/LeeYudok/dok3search/pull/83)) 완료 상태 현행화
+
 ## v1.9 — 2026-11-23
 - `doksam-korean` → `dok3-analyzer` 통합 및 분석기 프로파일 전환 설계 반영:
   - 순수 Rust `mecab-ko-dic` Viterbi lattice 코어(`dok3-analyzer::kodic`)를 `dok3-analyzer`에 통합하고, `DOK3_ANALYZER_PROFILE`(`builtin`/`lindera`/`nori-mixed`/`nori-discard`), `DOK3_DICT_PATH`, `DOK3_USER_DICT_PATH` 환경변수와 프로파일/사전 변경 시 영속 세대 자동 재구축 계약 추가
