@@ -167,7 +167,7 @@ pub struct ParsedDocument {
 
 | 분석 필드 | 색인 전략 | 검색 역할 |
 |---|---|---|
-| `title_morph`, `body_morph` | 한국어 형태소 분석(사전 고정, 품질 테스트) | 업무용어·한글 자연어 |
+| `title_morph`, `body_morph` | 한국어 형태소 분석(`dok3-analyzer::kodic` + 프로파일 전환: `builtin`/`lindera`/`nori-mixed`/`nori-discard`, 품질 테스트) | 업무용어·한글 자연어 |
 | `body_bigram` | 2글자 문자 bi-gram | 부분 검색·띄어쓰기 보완 |
 | `body_ngram` | 문자 2~4-gram | 오타/불완전 문자열 보조 검색 |
 | `body_plain` | 일반 토큰화 | 영어 설명서, 코딩 매뉴얼 |
@@ -176,7 +176,9 @@ pub struct ParsedDocument {
 | `error_code` | 정확 일치 | `ORA-00904`, `E0382` |
 | `tags`, `keywords` | 정규화 키워드 | 필터·부스팅·분류 |
 
-형태소·n-gram은 **별도 필드**로 관리한다. 부정확한 n-gram이 상위 순위를 점유하지 않도록 낮은 가중치로 후보를 보완한다. 사전/분석기를 변경하면 해당 필드의 재색인이 필요하다. Tantivy의 BM25를 기본 후보 점수로 사용한다.
+형태소·n-gram은 **별도 필드**로 관리한다. 부정확한 n-gram이 상위 순위를 점유하지 않도록 낮은 가중치로 후보를 보완한다. `DOK3_ANALYZER_PROFILE`(`builtin`, `lindera`, `nori-mixed`, `nori-discard`)과 `DOK3_DICT_PATH`·`DOK3_USER_DICT_PATH`로 분석기 프로파일과 사전을 지정하며, 프로파일이나 사전이 바뀌면 `dok3-index-manager`가 영속 세대를 자동으로 재구축한다. Tantivy의 BM25를 기본 후보 점수로 사용한다.
+
+또한 `ai-coder` 등 외부 코딩 에이전트는 별도 검색 엔진을 복제하지 않고 `dok3search`의 REST/MCP(`dok3-agent`)를 단일 진입점(SSOT)으로 사용해 문서와 코드를 함께 검색한다.
 
 ### 5.3 검색 파이프라인
 
