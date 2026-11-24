@@ -1,5 +1,12 @@
 # 변경 이력
 
+## v2.2 — 2026-11-24
+- **P4-1 SQLite 완료**: `SqliteSourceAdapter` + `dok3-server` `SourceRegistry`/`source_cursors.json` 증분·전체 수집 + `/admin` UI 배선 (#125).
+- **P4-2(MySQL/MariaDB)·P4-3(PostgreSQL) [순수 Rust 드라이버·읽기 전용 트랜잭션 완료 / 서버 Source UI 배선·실DB 통합 테스트 잔여]**: `PostgresRowReader`(`postgres` 크레이트)·`MysqlRowReader`(`mysql` minimal-rust) `DbRowReader` 구현과 TCP·적색화 계약 테스트 (#124). `dok3-server` Source 레지스트리 배선과 실 운영 DB 통합 테스트는 잔여.
+- **P5-1 Oracle [방언 쿼리 추상화만 구현 / 실제 Oracle 드라이버·통합 테스트 미구현]**: 변경 없음.
+- **P7-1 Windows [네이티브 SCM 서비스(`--windows-service`)·설치 스크립트 완료 / Windows 실기 재부팅·Event Log 검증 잔여]** (#126).
+- 최종 머지 SHA: `425b4af`. v2.1 항목은 아래에 그대로 둔다.
+
 ## v2.1 — 2026-11-24
 - **v2.0 과장 표기 정정 (P0~P8 전체 완료 아님)**: v2.0 의 "P0~P8 전체 로드맵 100% 완료"·`P8-complete` 는 크레이트 단위 구현·단위 테스트를 서버 런타임 배선·실기 검증까지 끝난 것처럼 적은 과장이었다. 로드맵·인덱스·README·워크스페이스 문서의 상태 태그를 실제 구현 수준으로 되돌렸다.
 - **`dok3-server` `ParserRegistry` 다중 확장자 런타임 배선** (구현 PR `118`, 머지 SHA `aaf1c1b`): `ParserRegistry`를 `dok3-server` 수집 경로에 연결해 `md`/`markdown`/`mdown`/`mkd`/`html`/`htm`/`rs`/`java`/`go`/`sql`/`jsp`/`txt`/`log` 확장자를 런타임에서 파서로 분기한다. 기준은 `dok3search` `main` `249a66f` + 이 배선 PR 이다.
