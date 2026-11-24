@@ -1,6 +1,13 @@
 # 변경 이력
 
+## v2.1 — 2026-11-24
+- **v2.0 과장 표기 정정 (P0~P8 전체 완료 아님)**: v2.0 의 "P0~P8 전체 로드맵 100% 완료"·`P8-complete` 는 크레이트 단위 구현·단위 테스트를 서버 런타임 배선·실기 검증까지 끝난 것처럼 적은 과장이었다. 로드맵·인덱스·README·워크스페이스 문서의 상태 태그를 실제 구현 수준으로 되돌렸다.
+- **`dok3-server` `ParserRegistry` 다중 확장자 런타임 배선** (구현 PR `118`, 머지 SHA `aaf1c1b`): `ParserRegistry`를 `dok3-server` 수집 경로에 연결해 `md`/`markdown`/`mdown`/`mkd`/`html`/`htm`/`rs`/`java`/`go`/`sql`/`jsp`/`txt`/`log` 확장자를 런타임에서 파서로 분기한다. 기준은 `dok3search` `main` `249a66f` + 이 배선 PR 이다.
+- **정정된 상태 태그**: P1-2 파일 저장소 완료/SQLite 이관 잔여(ADR-0001), P2-1 식별자·줄 단위 심볼 파서 배선 완료/Tree-sitter 잔여, P4-1 크레이트 완료/서버 배선 잔여(`SqliteSourceAdapter` 는 `dok3-connectors` 에만 있고 `dok3-server`·`SourceRegistry` 미배선), P4-2·P4-3·P5-1 방언 쿼리 추상화만 구현/실제 드라이버·통합 테스트 미구현, P5-2 HTML·코드·TXT 런타임 배선 완료/PDF·DOCX·Git·SVN 미구현, P6-1 커서·메트릭 완료/원문 다운로드(`/original`)·분석 API(`/search/analyze`)·`/admin/analyzers` 잔여, P7-1 PowerShell 래퍼 초안/네이티브 SCM·Event Log·실기 검증 미완, P7-2 Cargo·npm·사전 번들 스크립트 완료/툴체인·SBOM·클린 빌드 실증 잔여, P8 A2A·`/llms.txt` 라우트 완료/`AcpAdapter` 서버 배선·오프라인 분류 에이전트·인증 미구현.
+
 ## v2.0 — 2026-11-24
+> **v2.1 에서 정정됨**: 아래 "100% 완료" 표기는 과장이다. 실제 상태와 잔여 항목은 v2.1 항목과 로드맵 2절을 따른다.
+
 - **P0~P8 전체 로드맵 100% 완료 반영 (`dok3search` `main` `b298c60`)**:
   - P2-1 / P5-2: `CodeSymbolParser`(Rust/Java/Go/SQL/JSP)·`PlainTextParser`·`ParserRegistry` ([PR #108](https://github.com/LeeYudok/dok3search/pull/108))
   - P4 / P5-1: `sql_guard` SQL-aware SELECT/CTE 검증, SQLite `batch_limit`/`has_more` hardening, MySQL/MariaDB·PostgreSQL·Oracle 공통 `RelationalSourceAdapter` ([PR #110](https://github.com/LeeYudok/dok3search/pull/110))
