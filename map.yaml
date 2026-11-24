@@ -1,6 +1,6 @@
 schema_version: '1.0'
 project: dok3search
-updated: '2026-11-22'
+updated: '2026-11-24'
 index: index.yaml
 
 architecture:
@@ -23,7 +23,7 @@ screens:
   - {id: sources, path: '/sources', status: planned}
   - {id: source_admin, path: '/admin/sources', status: local_rest}
   - {id: index_jobs, path: '/admin/jobs', status: local_rest}
-  - {id: analyzer_admin, path: '/admin/analyzers', status: planned}
+  - {id: analyzer_admin, path: '/admin/analyzers', status: local_rest}
 
 search_taxonomy:
   top_level_categories: [guide, manual, code, policy, design]
