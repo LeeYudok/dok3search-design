@@ -4,9 +4,9 @@ updated: '2026-11-24'
 
 implementation:
   repository: 'https://github.com/LeeYudok/dok3search'
-  merged_phase: 'P8-complete'
-  merged_phase_status: completed
-  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/114'
+  merged_phase: 'P3-plus-parser-wiring'
+  merged_phase_status: in_progress
+  merged_reference: 'https://github.com/LeeYudok/dok3search/pull/118'
   design_copy_sync_reference: 'https://github.com/LeeYudok/dok3search/pull/66'
   index_schema_version: '2'
   local_search_backend: tantivy-persistent
@@ -39,16 +39,26 @@ implementation:
   merged_crates:
     - 'dok3-domain (P0-2 PR #12; P3-1/P3-2/P3-3 IndexJobPort·ClassificationPort·SourceRegistryPort PR #65·#68·#70)'
     - 'dok3-storage (P1-2 PR #22·#27; P2-wiring PR #54; P3-2 원문 불변 put_immutable·update_metadata PR #68)'
-    - 'dok3-parser (P1-1, PR #24)'
+    - 'dok3-parser (P1-1 PR #24; CodeSymbolParser·PlainTextParser·ParserRegistry PR #108; dok3-server 다중 확장자 런타임 배선 PR 118)'
     - 'dok3-index (P1-3, PR #26; analyzer v2 통합 PR #56)'
-    - 'dok3-connectors (P1-4a, PR #29)'
+    - 'dok3-connectors (P1-4a PR #29; SqliteSourceAdapter·RelationalSourceAdapter 방언 쿼리 추상화 PR #110 — dok3-server 미배선, 실제 DB 드라이버 없음)'
     - 'dok3-analyzer (P2-1, PR #31; index 통합 PR #56; P2-2 한국어 정규화 PR #61)'
-    - 'dok3-agent (P2-5, PR #34; server/api 배선 PR #55)'
+    - 'dok3-agent (P2-5 PR #34; server/api 배선 PR #55; A2A·/llms.txt 라우트 PR #114; AcpAdapter 는 서버 미배선)'
     - 'dok3-index-manager (P1-4b, PR #36; DOK3_DATA_DIR 배선 PR #54)'
     - 'dok3-benchmark (P2-6, PR #37; v2 비교 회귀 PR #56)'
     - 'dok3-search (P2-4 Knowledge Pack 자동 적재·UI/MCP self-search PR #62)'
     - 'dok3-api (P0-3 PR #12·#14; /mcp 배선 PR #55; P3-1/P3-2/P3-3 관리·분류·소스 API 및 루프백 가드 PR #65·#68·#70)'
     - 'dok3-server (tantivy-local PR #43·#46, tantivy-persistent PR #54, /mcp·--mcp-stdio PR #55, P3-1 증분 재수집·워커·작업 API PR #60·#65, P2-4 Knowledge Pack PR #62, P3-2 규칙 분류기·분류 저장소 PR #68, P3-3 다중 소스 레지스트리·부분 재스캔 PR #70)'
+  remaining_gaps:
+    - 'P1-2: 파일 저장소(documents.json/journal.jsonl) 사용 중, SQLite 이관 잔여 (ADR-0001)'
+    - 'P2-1: 식별자·줄 단위 심볼 파서 배선 완료, Tree-sitter 잔여'
+    - 'P4-1: SqliteSourceAdapter 는 dok3-connectors 에만 있고 dok3-server·SourceRegistry 미배선'
+    - 'P4-2/P4-3/P5-1: RelationalSourceAdapter 는 DbRowReader trait 위 방언 쿼리 추상화만 구현, 실제 드라이버(sea-orm/sqlx/oracle)·통합 테스트 미구현'
+    - 'P5-2: HTML·코드·TXT 런타임 배선 완료, PDF·DOCX·Git·SVN 미구현'
+    - 'P6-1: 커서·메트릭 완료, 원문 다운로드(/original)·분석 API(/search/analyze)·/admin/analyzers 잔여'
+    - 'P7-1: PowerShell 래퍼 초안, 네이티브 SCM(windows-service)·Event Log·실기 검증 미완'
+    - 'P7-2: Cargo·npm·사전 번들 스크립트 완료, 툴체인·SBOM·클린 빌드 실증 잔여'
+    - 'P8: A2A·/llms.txt 라우트 완료, AcpAdapter 서버 배선·오프라인 분류 에이전트·인증 미구현'
   bundled_references:
     issue: 'https://github.com/LeeYudok/dok3search/issues/21'
     category: guide

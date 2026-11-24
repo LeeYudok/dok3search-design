@@ -5,7 +5,7 @@
 
 아래 경로는 [구현 저장소](https://github.com/LeeYudok/dok3search)의 구성이다. P0 구현은 `dok3-core`·`dok3-domain`의 계약 타입과 `dok3-search`·`dok3-api`·`dok3-server`의 인메모리 HTTP 검색을 제공한다([PR #12](https://github.com/LeeYudok/dok3search/pull/12), [PR #14](https://github.com/LeeYudok/dok3search/pull/14)).
 
-### P1·P2·P3 구현·런타임 배선 현황 (`main` `57bf0bd` 기준, 2026-11-22)
+### P1·P2·P3 구현·런타임 배선 현황 (`main` `249a66f` + `ParserRegistry` 배선 PR `118` 기준, 2026-11-24)
 - **`dok3-storage` (P1-2·영속 배선·원문 불변 강화 완료, [PR #22](https://github.com/LeeYudok/dok3search/pull/22)·[PR #27](https://github.com/LeeYudok/dok3search/pull/27)·[PR #54](https://github.com/LeeYudok/dok3search/pull/54)·[PR #68](https://github.com/LeeYudok/dok3search/pull/68))**: `FileDocumentStore`·`FileChangeJournal`·단일 writer 락·손상 복구를 구현했고, `DOK3_DATA_DIR` 설정 시 `dok3-server`에 영속 연결됐다(`document_ids`/`list_documents`/`last_sequence`). P3-2에서는 `put_immutable`·`update_metadata`로 기존 `objects/<sha256>`·`content_hash`·`revision_id`·`body`·`markdown`·`source_uri` 불변성을 보장한다.
 - **`dok3-parser` (P1-1 완료, [PR #24](https://github.com/LeeYudok/dok3search/pull/24))**: 외부 크레이트 0개 순수 Rust `MarkdownParser`(`DocumentParserPort`), H1~H3 섹션·코드 펜스·유니코드/한글 중복 방지 앵커 및 골든 테스트 7종을 반영했다.
 - **`dok3-analyzer` + `dok3-index` 통합 (P1-3·P2-1 코드 식별자 통합·P2-2 완료; Tree-sitter Rust/Java 잔여, [PR #26](https://github.com/LeeYudok/dok3search/pull/26)·[PR #31](https://github.com/LeeYudok/dok3search/pull/31)·[PR #56](https://github.com/LeeYudok/dok3search/pull/56)·[PR #61](https://github.com/LeeYudok/dok3search/pull/61))**: `dok3_analyzer::analyze_text`를 `TantivyIndex` 스키마 `v2`(`SCHEMA_VERSION = 2`, `dok3_text_v2`·`dok3_ngram_v2`)의 색인·질의 경로에 연결했다(기존 v1 디스크 색인은 새 세대 재색인 필요). [PR #61](https://github.com/LeeYudok/dok3search/pull/61)은 오프라인 국문 조사를 제거하고 금융/개발 복합어를 정규화했으며, 한국어 골든 40건과 한국어 10쿼리 `Recall@5`·`MRR@5` `0.20 → 1.00`, ACL 위반 0건을 확인했다.
@@ -27,14 +27,14 @@ dok3search/
     crates/
       dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN·DOK3_ANALYZER_PROFILE·DOK3_DICT_PATH·DOK3_USER_DICT_PATH 등), 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait(검색·저장·작업·분류·소스)
-      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2·영속 배선·원문 불변 강화 완료)
-      dok3-connectors/       # 로컬 파일, SQLite(`sql_guard`+`batch_limit`), MySQL/MariaDB·PostgreSQL·Oracle 공통 관계형 어댑터(P4/P5-1 완료)
-      dok3-parser/           # Markdown, HTML, CodeSymbolParser(Rust/Java/Go/SQL/JSP), PlainTextParser, ParserRegistry(P2-1/P5-2 완료)
+      dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2 파일 저장소·영속 배선·원문 불변 강화 완료; SQLite 이관 잔여, ADR-0001)
+      dok3-connectors/       # 로컬 파일, SQLite(`sql_guard`+`batch_limit`), MySQL/MariaDB·PostgreSQL·Oracle 공통 관계형 어댑터(`DbRowReader` trait 위 방언 쿼리 추상화만 구현, dok3-server 미배선·실제 드라이버 없음; P4/P5-1 잔여)
+      dok3-parser/           # Markdown, HTML, CodeSymbolParser(Rust/Java/Go/SQL/JSP), PlainTextParser, ParserRegistry(dok3-server 다중 확장자 런타임 배선 완료; Tree-sitter·PDF·DOCX·Git·SVN 잔여)
       dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·순수 Rust mecab-ko-dic 형태소 분석기(`kodic`, 프로파일: `builtin`/`lindera`/`nori-mixed`/`nori-discard`) 및 사용자 사전 지원
       dok3-index/            # TantivyIndex(SearchPort), schema v2(dok3-analyzer 통합), 수동 reader reload
       dok3-index-manager/    # Blue-Green 세대 빌드·검증·활성화·복구 상태 머신(DOK3_DATA_DIR 배선 완료)
       dok3-search/           # 검색, ACL 필터, 원문 접근 응용 서비스
-      dok3-agent/            # MCP JSON-RPC stdio/HTTP, A2A(`/.well-known/agent.json`, `/a2a`), ACP, `/llms.txt` 어댑터(P8 완료)
+      dok3-agent/            # MCP JSON-RPC stdio/HTTP, A2A(`/.well-known/agent.json`, `/a2a`), ACP, `/llms.txt` 어댑터(A2A·`/llms.txt` 라우트만 완료; `AcpAdapter` 서버 배선·인증 미구현)
       dok3-api/              # Axum 라우터(`build_router_with_extra`)·검색·문서 조회·작업/분류/소스 API·관리자 가드
       dok3-benchmark/        # PoC 검색 품질(v1 vs v2)·동시 부하 하네스(P2-6 완료)
       dok3-server/           # HTTP(`tantivy-persistent`/`tantivy-local`/`in-memory-fake`)·워커·분류·소스 레지스트리·`/mcp`·`--mcp-stdio` 진입점
@@ -125,7 +125,7 @@ API 응답과 감사 로그는 아래 안정적인 대문자 코드를 사용한
 3. P2 크레이트(`dok3-analyzer`, `dok3-agent`, `dok3-benchmark`) 및 CI 필수 체크 도입 (`main` 머지 완료)
 4. P2 런타임 배선: `dok3-index`+`dok3-analyzer` `SCHEMA_VERSION = 2` 통합([PR #56](https://github.com/LeeYudok/dok3search/pull/56)), `DOK3_DATA_DIR` 영속 세대 전환([PR #54](https://github.com/LeeYudok/dok3search/pull/54)), `POST /mcp`·`--mcp-stdio`([PR #55](https://github.com/LeeYudok/dok3search/pull/55)) (`main` 머지 완료)
 5. 국문 조사/복합어 정규화(P2-2), 자체 운영 매뉴얼 자동 색인(P2-4), 주기 수집·분류·관리 UI(P3-1~P3-3) `main` 머지 완료; Tree-sitter 보강(P2-1) 잔여
-6. DB 어댑터별 계약 테스트, 50만 건 벤치마크, Windows 서비스 및 폐쇄망 설치 번들
+6. 잔여: 실제 DB 드라이버·통합 테스트와 서버 배선(P4~P5), 50만 건 벤치마크, 네이티브 Windows 서비스·실기 검증 및 폐쇄망 클린 빌드 실증(P7), `AcpAdapter` 배선·인증(P8)
 
 ## 의존성 방향
 `dok3-domain`은 외부 크레이트 구현(Tantivy, Axum, SQLite 드라이버 등)에 의존하지 않는다. `dok3-parser`는 `dok3-index`를 직접 의존하거나 수정하지 않는다. `dok3-index-manager`는 `dok3-storage`와 `dok3-index`를 조합해 세대 빌드·전환·복구를 담당하며, `dok3-api`와 `dok3-agent`는 `dok3-search` 응용 서비스를 호출하고 도메인 로직을 중복 구현하지 않는다.
