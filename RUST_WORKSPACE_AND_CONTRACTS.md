@@ -28,7 +28,7 @@ dok3search/
       dok3-core/             # 오류(Dok3Error), 설정(DOK3_SOURCE_DIR·DOK3_DATA_DIR·DOK3_REFRESH_INTERVAL_SECS·DOK3_ENABLE_ADMIN·DOK3_ANALYZER_PROFILE·DOK3_DICT_PATH·DOK3_USER_DICT_PATH 등), 공통 타입
       dok3-domain/           # DocumentId, RevisionId, SectionId, GenerationId, Port Trait(검색·저장·작업·분류·소스)
       dok3-storage/          # 파일 원문 SHA-256 저장소·JSONL 변경 저널(P1-2 파일 저장소·영속 배선·원문 불변 강화 완료; SQLite 이관 잔여, ADR-0001)
-      dok3-connectors/       # 로컬 파일, SQLite(`sql_guard`+`batch_limit`), MySQL/MariaDB·PostgreSQL·Oracle 공통 관계형 어댑터(`DbRowReader` trait 위 방언 쿼리 추상화만 구현, dok3-server 미배선·실제 드라이버 없음; P4/P5-1 잔여)
+      dok3-connectors/       # 로컬 파일, SQLite(`sql_guard`+`batch_limit`), SQLite(`dok3-server` `SourceRegistry` 배선 완료), MySQL/MariaDB·PostgreSQL 순수 Rust `DbRowReader`(`MysqlRowReader`·`PostgresRowReader`, 읽기 전용 트랜잭션; 서버 Source UI 배선·실DB 통합 테스트 잔여), Oracle 방언 쿼리 추상화만 구현(실제 드라이버 없음; P5-1 잔여)
       dok3-parser/           # Markdown, HTML, CodeSymbolParser(Rust/Java/Go/SQL/JSP), PlainTextParser, ParserRegistry(dok3-server 다중 확장자 런타임 배선 완료; Tree-sitter·PDF·DOCX·Git·SVN 잔여)
       dok3-analyzer/         # 코드 식별자·오류코드·문자 n-gram·순수 Rust mecab-ko-dic 형태소 분석기(`kodic`, 프로파일: `builtin`/`lindera`/`nori-mixed`/`nori-discard`) 및 사용자 사전 지원
       dok3-index/            # TantivyIndex(SearchPort), schema v2(dok3-analyzer 통합), 수동 reader reload
