@@ -1,5 +1,15 @@
 # 변경 이력
 
+## v2.3 — 2026-11-24
+- **순수 엔지니어링 구현(~92%) 완료**:
+  - **P6-1 완료** (`#130`): `GET /api/v1/documents/{id}/original`, `POST /api/v1/search/analyze`, `/admin/analyzers` UI.
+  - **P4-2/P4-3 서버 배선 완료** (`#132`): PostgreSQL·MySQL/MariaDB `SourceRegistry`(`dsn_env`) 및 `/admin/sources` UI(실DB 통합 테스트는 환경 의존 잔여).
+  - **P5-2/P2-1 완료** (`#134`): `DocxParser`, `PdfParser`, `CodeSymbolParser` Tree-sitter AST(Rust/Java/Go), `GitRepoConnector`, `SvnConnector`.
+  - **P1-2 완료** (`#136`): `FileDocumentStore`·`FileChangeJournal` SQLite `meta.db`(WAL) 이관 및 레거시 JSON/JSONL 투명 마이그레이션.
+  - **성능·전송 최적화 완료** (`#138`, `gimje/infra` MR `!131`): `dok3-api` Gzip/Brotli 압축 + `pig` nginx `gzip on`, `sample-documents` 지연 로딩(`modulepreload` 제거), UTF-8 고속 스니펫 추출.
+  - **P8 에이전트·분류 완료** (`#140`): `POST /acp` + `--acp-stdio`, `ClassificationSource::Agent`, `OfflineLlmClassifier`(루프백/RFC1918 에어갭 가드·규칙 폴백·프런트 `AI 자동 분류` 배지).
+- **잔여(~8%p, 환경 의존)**: 실 PostgreSQL/MySQL 통합 테스트, Oracle 실드라이버, Windows 실기 재부팅/Event Log, 폐쇄망 클린 빌드 실증, 외부 IdP 연동.
+
 ## v2.2 — 2026-11-24
 - **P4-1 SQLite 완료**: `SqliteSourceAdapter` + `dok3-server` `SourceRegistry`/`source_cursors.json` 증분·전체 수집 + `/admin` UI 배선 (#125).
 - **P4-2(MySQL/MariaDB)·P4-3(PostgreSQL) [순수 Rust 드라이버·읽기 전용 트랜잭션 완료 / 서버 Source UI 배선·실DB 통합 테스트 잔여]**: `PostgresRowReader`(`postgres` 크레이트)·`MysqlRowReader`(`mysql` minimal-rust) `DbRowReader` 구현과 TCP·적색화 계약 테스트 (#124). `dok3-server` Source 레지스트리 배선과 실 운영 DB 통합 테스트는 잔여.
