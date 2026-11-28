@@ -1,5 +1,9 @@
 # 변경 이력
 
+## 2026-11-28
+
+- HTTP MCP의 Bearer 인증, 키 미설정 시 401 응답, doksam Kubernetes Secret 설정을 배포 설계에 기록했다.
+
 ## v2.3 — 2026-11-24
 - **순수 엔지니어링 구현(~92%) 완료**:
   - **P6-1 완료** (`#130`): `GET /api/v1/documents/{id}/original`, `POST /api/v1/search/analyze`, `/admin/analyzers` UI.

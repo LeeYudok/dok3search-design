@@ -41,6 +41,10 @@ protocols:
     enabled: true
     transport: streamable_http
     path: /mcp
+    auth_required: true
+    auth_scheme: bearer
+    tokens_env: DOK3_MCP_AUTH_TOKENS
+    document_scope: public
   a2a:
     enabled: false
     path: /a2a
