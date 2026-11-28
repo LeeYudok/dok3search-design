@@ -286,6 +286,8 @@ pub struct SourceBatch {
 
 `kb_search`, `kb_get_document`, `kb_get_section`, `kb_search_api`, `kb_search_error`, `kb_search_code`, `kb_list_categories`를 지원한다. **stdio**와 **Streamable HTTP** 전송을 구분 구현한다. 2026-07-28 버전은 Streamable HTTP 전송에서 단일 POST 엔드포인트 중심이며 이전 2025-11-25 규격과 GET/세션 관련 차이가 있으므로 버전 네고시에이션과 호환성 매트릭스를 별도로 검증한다. 최초에는 REST 공용 UseCase를 이용한 어댑터로 구현해 중복 비즈니스 로직을 만들지 않는다. Codex/Claude Code의 실제 클라이언트 설정은 설치 버전별로 검증한다.
 
+HTTP MCP는 Bearer 키를 요구한다. 로컬 stdio는 키 없이 실행한다. 두 전송 방식 모두 공개 문서를 조회한다. 키 발급과 401 응답은 [네트워크·배포 설계](dok3search-network-deployment.md#http-mcp-인증)를 따른다.
+
 ### 8.3 A2A(후속)
 
 에이전트 간 **작업 위임/결과 반환**을 위한 별도 서버 어댑터. Agent Card, 작업 상태·메시지·아티팩트 계약과 인증/인가를 사용한다. MCP가 제공하는 검색 도구 기능을 A2A에서 일관되게 노출하되 도메인 로직을 재구현하지 않는다.

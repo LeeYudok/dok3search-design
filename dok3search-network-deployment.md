@@ -26,6 +26,13 @@ DBMS 포트는 서버별 설정값을 우선한다. DB 포트는 dok3search가 �
 - 인증서·키·DB 자격증명은 YAML에 평문 저장하지 않고 OS 보안 저장소 또는 보호된 비밀 설정을 사용한다.
 - 검색 결과의 접근권한 필터는 색인 조회 시 적용하고 원문 열람 시 재검증한다. 감사 로그에 비밀·문서 원문을 무분별하게 남기지 않는다.
 
+### HTTP MCP 인증
+
+- 클라이언트는 `POST /mcp` 요청에 `Authorization: Bearer <키>` 헤더를 보낸다. 키가 없거나 유효하지 않으면 `401 Unauthorized`와 `WWW-Authenticate: Bearer`를 반환한다.
+- 서버는 `DOK3_MCP_AUTH_TOKENS`에서 키를 읽는다. 값은 `token:subject:public` 형식이다. 여러 키는 세미콜론으로 구분한다. 키를 설정하기 전에는 모든 HTTP MCP 요청을 거부한다.
+- doksam 운영 환경은 `dok3search` 네임스페이스의 `dok3search-mcp-auth` Secret에서 이 값을 주입한다. 키를 바꾸면 Deployment를 재시작한다.
+- 인증된 HTTP MCP와 로컬 `--mcp-stdio`는 공개 문서 권한으로 조회한다. 로컬 stdio에는 키가 필요 없다.
+
 ## 서비스/배포
 1. 폐쇄망 반입물: 서명/해시 검증된 exe, React 빌드 산출물(내장 가능), Cargo/npm 공급망 묶음, Tree-sitter grammar, 형태소 사전, 공식 매뉴얼, DB 드라이버/네이티브 런타임, 라이선스/SBOM.
 2. Windows Service 설치 및 서비스 계정 최소 권한 설정. 데이터 디렉터리·색인 디렉터리·백업 디렉터리를 분리한다.

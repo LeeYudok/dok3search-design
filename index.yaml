@@ -19,6 +19,11 @@ implementation:
   mcp_transports:
     - 'POST /mcp'
     - '--mcp-stdio'
+  mcp_http_auth:
+    scheme: bearer
+    tokens_env: DOK3_MCP_AUTH_TOKENS
+    missing_or_invalid_status: 401
+    document_scope: public
   persistent_endpoints_require_env:
     - DOK3_SOURCE_DIR
     - DOK3_DATA_DIR
